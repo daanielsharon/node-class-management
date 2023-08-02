@@ -1,0 +1,46 @@
+openapi: "3.0.3"
+
+info:
+  title: xyz class management
+  description: class management tools for every school
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /v1/students:
+    get:
+      tags:
+        - v1/students
+      summary: get students information
+      responses:
+        "200":
+          description: get all students information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  status:
+                    type: string
+components:
+  schemas:
+    students:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        classes:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              name:
+                type: string
