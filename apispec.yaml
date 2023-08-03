@@ -12,7 +12,7 @@ paths:
   /v1/students:
     get:
       tags:
-        - v1/students
+        - students
       summary: get students information
       responses:
         "200":
@@ -26,8 +26,93 @@ paths:
                     type: number
                   status:
                     type: string
+                  data:
+                    $ref: "#/components/schemas/students"
+        "500":
+          $ref: "#/components/responses/500"
+
+    post:
+      tags:
+        - students
+      summary: create a new student
+      requestBody:
+        $ref: "#/components/requestBodies/insertOrUpdateStudents"
+      responses:
+        "200":
+          description: create a new student success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    example: 200
+                  status:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#components/schemas/insertOrUpdateStudents"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+
+  /v1/student/{id}:
+    get:
+      tags:
+        - students
+      summary: get a student information
+      parameters:
+        - $ref: "#components/parameters/id"
+
+      responses:
+        "500":
+          $ref: "#/components/responses/500"
+
 components:
   schemas:
+    classes:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        instructors:
+          $ref: "#/components/schemas/instructors"
+        assignments:
+          $ref: "#/components/schemas/assignments"
+        status:
+          type: string
+          enum:
+            - scheduled
+            - ongoing
+            - completed
+            - cancelled
+          default: scheduled
+        notes:
+          type: string
+      minProperties: 2
+      additionalProperties: false
+
+    instructors:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        created_date:
+          type: string
+          format: date-time
+        updated_date:
+          type: string
+          format: date-time
+      minProperties: 2
+      maxProperties: 5
+      additionalProperties: false
+
     students:
       type: object
       properties:
@@ -38,9 +123,128 @@ components:
         classes:
           type: array
           items:
-            type: object
-            properties:
-              _id:
-                type: string
-              name:
-                type: string
+            $ref: "#/components/schemas/classes"
+        created_date:
+          type: string
+          format: date-time
+        updated_date:
+          type: string
+          format: date-time
+      minProperties: 5
+      maxProperties: 5
+      additionalProperties: false
+
+    assignments:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        due:
+          type: string
+          format: date-time
+        instructors:
+          type: array
+          items:
+            $ref: "#/components/schemas/instructors"
+        status:
+          type: string
+          enum:
+            - todo
+            - working
+            - done
+          default: todo
+        grade:
+          type: number
+          minimum: 0
+          maximum: 100
+          nullable: true
+          default: null
+      minProperties: 2
+      additionalProperties: false
+
+    errors:
+      type: object
+      properties:
+        code:
+          type: number
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            error:
+              type: string
+
+    insertOrUpdateStudents:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Joko"
+
+  parameters:
+    id:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: number
+        minimum: 1
+      description: id of specified resource
+
+  requestBodies:
+    insertOrUpdateStudents:
+      description: Request body to insert and update students data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/insertOrUpdateStudents"
+
+  responses:
+    "400":
+      description: Wrong input from the client
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errors"
+          example:
+            code: 400
+            status: Bad Request
+            data:
+              error: column.ID validation error
+    "401":
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errors"
+          example:
+            code: 401
+            status: Unauthorized
+            data:
+              error: No token provided
+    "404":
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errors"
+          example:
+            code: 404
+            status: Not Found
+            data:
+              error: User ID x8934yhf is not found!
+    "500":
+      description: Unexpected Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errors"
+          example:
+            code: 500
+            status: Internal Server Error
+            data:
+              error: pg.Name is not integer!
