@@ -9,10 +9,10 @@ servers:
   - url: http://localhost:8080/api
 
 paths:
-  /v1/students:
+  /v1/students/profile:
     get:
       tags:
-        - students
+        - students profile
       summary: get students information
       responses:
         "200":
@@ -27,13 +27,16 @@ paths:
                   status:
                     type: string
                   data:
-                    $ref: "#/components/schemas/students"
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/students-profile"
+                    minItems: 0
         "500":
           $ref: "#/components/responses/500"
 
     post:
       tags:
-        - students
+        - students profile
       summary: create a new student
       requestBody:
         $ref: "#/components/requestBodies/insertOrUpdateStudents"
@@ -58,15 +61,43 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
-  /v1/student/{id}:
+  /v1/student/profile/{id}:
     get:
       tags:
-        - students
+        - students profile
       summary: get a student information
       parameters:
         - $ref: "#components/parameters/id"
-
       responses:
+        "200":
+          description: get a student information success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/students-profile"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    patch:
+      description: update a student information
+      tags:
+        - students profile
+      parameters:
+        - $ref: "#components/parameters/id"
+      requestBody:
+        $ref: "#/components/requestBodies/insertOrUpdateStudents"
+      responses:
+        "200":
+          description: update a student information success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/insertOrUpdateStudents"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
 
@@ -77,12 +108,23 @@ components:
       properties:
         _id:
           type: string
+          example: as8ohr43843n
         name:
           type: string
+          example: mathematics
+        room:
+          type: string
+          nullable: true
+          example: online
         instructors:
-          $ref: "#/components/schemas/instructors"
+          type: array
+          items:
+            $ref: "#/components/schemas/instructors"
+          minimum: 0
         assignments:
-          $ref: "#/components/schemas/assignments"
+          type: array
+          items:
+            $ref: "#/components/schemas/assignments"
         status:
           type: string
           enum:
@@ -91,8 +133,11 @@ components:
             - completed
             - cancelled
           default: scheduled
+          example: scheduled
         notes:
           type: string
+          example: trial class for newcomers
+          nullable: true
       minProperties: 2
       additionalProperties: false
 
@@ -101,8 +146,10 @@ components:
       properties:
         _id:
           type: string
+          example: n2kohvj23kl
         name:
           type: string
+          example: "Noora"
         created_date:
           type: string
           format: date-time
@@ -118,8 +165,26 @@ components:
       properties:
         _id:
           type: string
+          example: b12asdf23ksa3
         name:
           type: string
+          example: Joko
+        created_date:
+          type: string
+          format: date-time
+        updated_date:
+          type: string
+          format: date-time
+
+    students-profile:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: b12asdf23ksa3
+        name:
+          type: string
+          example: "Joko"
         classes:
           type: array
           items:
@@ -139,15 +204,13 @@ components:
       properties:
         _id:
           type: string
+          example: f289huiayf98as
         name:
           type: string
+          example: Practice yoga
         due:
           type: string
           format: date-time
-        instructors:
-          type: array
-          items:
-            $ref: "#/components/schemas/instructors"
         status:
           type: string
           enum:
@@ -155,12 +218,14 @@ components:
             - working
             - done
           default: todo
+          example: todo
         grade:
           type: number
           minimum: 0
           maximum: 100
           nullable: true
           default: null
+          example: 80
       minProperties: 2
       additionalProperties: false
 
