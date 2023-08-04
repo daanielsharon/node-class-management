@@ -34,9 +34,44 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
-    post:
+  /v1/students/profile/{id}:
+    get:
       tags:
         - students profile
+      summary: get a student information
+      parameters:
+        - $ref: "#components/parameters/id"
+      responses:
+        "200":
+          description: get a student information success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/students-profile"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
+  /v1/students:
+    get:
+      tags:
+        - students
+      summary: get students only data information
+      responses:
+        "200":
+          description: get students only data information success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/students"
+        "500":
+          $ref: "#/components/responses/500"
+    post:
+      tags:
+        - students
       summary: create a new student
       requestBody:
         $ref: "#/components/requestBodies/insertOrUpdateStudents"
@@ -61,28 +96,28 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
-  /v1/student/profile/{id}:
+  /v1/students/{id}:
     get:
       tags:
-        - students profile
-      summary: get a student information
+        - students
+      summary: get a student only data information
       parameters:
-        - $ref: "#components/parameters/id"
+        - $ref: "#/components/parameters/id"
       responses:
         "200":
-          description: get a student information success
+          description: get a student only data success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/students-profile"
+                $ref: "#/components/schemas/students"
         "404":
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
     patch:
-      description: update a student information
+      summary: update a student information
       tags:
-        - students profile
+        - students
       parameters:
         - $ref: "#components/parameters/id"
       requestBody:
@@ -100,6 +135,129 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+    delete:
+      tags:
+        - students
+      summary: delete a student data only
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: delete a student data success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/delete"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
+  /v1/classes:
+    get:
+      tags:
+        - classes
+      summary: get classes data
+      responses:
+        "200":
+          description: get classes data success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/classes"
+        "500":
+          $ref: "#/components/responses/500"
+    post:
+      tags:
+        - classes
+      summary: add classes data
+      requestBody:
+        $ref: "#/components/requestBodies/insertOrUpdateClasses"
+      responses:
+        "200":
+          description: add classes data success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/insertOrUpdateClasses"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+
+  /v1/classes/{id}:
+    get:
+      summary: get a specific class
+      tags:
+        - classes
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: get a specific class success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/classes"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    patch:
+      summary: update a class information
+      tags:
+        - classes
+      parameters:
+        - $ref: "#components/parameters/id"
+      requestBody:
+        $ref: "#/components/requestBodies/insertOrUpdateClasses"
+      responses:
+        "200":
+          description: update a class information success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/insertOrUpdateClasses"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    delete:
+      tags:
+        - classes
+      summary: delete a class data only
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: delete a student data success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/delete"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
+  # /v1/studies/:
+  #   post:
+  #     tags:
+  #       - studies
+  #     summary: add a study data
+  #     requestBody:
+  #       $ref: "#/components/requestBodies/insertOrUpdateStudies"
+  #     responses:
+  #       "200":
+  #         description: add a study data success
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/insertOrUpdateStudies"
 
 components:
   schemas:
@@ -116,6 +274,10 @@ components:
           type: string
           nullable: true
           example: online
+        students:
+          type: array
+          items:
+            $ref: "#/components/schemas/students"
         instructors:
           type: array
           items:
@@ -249,6 +411,51 @@ components:
           type: string
           example: "Joko"
 
+    insertOrUpdateClasses:
+      type: object
+      properties:
+        name:
+          type: string
+          example: mathematics
+        room:
+          type: number
+          example: 1
+        status:
+          type: string
+          enum:
+            - scheduled
+            - ongoing
+            - completed
+            - cancelled
+          default: scheduled
+          example: scheduled
+        notes:
+          type: string
+          example: trial class for newcomers
+          nullable: true
+
+    insertOrUpdateStudies:
+      type: object
+      properties:
+        class_id:
+          type: string
+        student_id:
+          type: string
+        instructor_id:
+          type: string
+        assignment_id:
+          type: string
+      required:
+        - class_id
+
+    delete:
+      type: object
+      properties:
+        code:
+          type: number
+        status:
+          type: string
+
   parameters:
     id:
       in: path
@@ -261,12 +468,26 @@ components:
 
   requestBodies:
     insertOrUpdateStudents:
-      description: Request body to insert and update students data
+      description: Request body to insert and update students
       required: true
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/insertOrUpdateStudents"
+    insertOrUpdateClasses:
+      description: Request body to insert and update classes
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/insertOrUpdateClasses"
+    insertOrUpdateStudies:
+      description: Request body to insert and update studies
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/insertOrUpdateStudies"
 
   responses:
     "400":
