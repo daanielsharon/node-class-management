@@ -9,6 +9,105 @@ servers:
   - url: http://localhost:8080/api
 
 paths:
+  /v1/users:
+    get:
+      tags:
+        - users
+      summary: get users only data information
+      responses:
+        "200":
+          description: get users only data information success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/users"
+        "500":
+          $ref: "#/components/responses/500"
+    post:
+      tags:
+        - users
+      summary: create a new user
+      requestBody:
+        $ref: "#/components/requestBodies/insertUsers"
+      responses:
+        "200":
+          description: create a new student success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    example: 200
+                  status:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#components/schemas/insertUsers"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+  /v1/users/{id}:
+    get:
+      tags:
+        - users
+      summary: get a user only data information
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: get a user only data success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/users"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    patch:
+      summary: update a student information
+      tags:
+        - users
+      parameters:
+        - $ref: "#components/parameters/id"
+      requestBody:
+        $ref: "#/components/requestBodies/updateUsers"
+      responses:
+        "200":
+          description: update a student information success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/updateUsers"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    delete:
+      tags:
+        - users
+      summary: delete a user data only
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: delete a user data success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/delete"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
   /v1/students/profile:
     get:
       tags:
@@ -33,7 +132,6 @@ paths:
                     minItems: 0
         "500":
           $ref: "#/components/responses/500"
-
   /v1/students/profile/{id}:
     get:
       tags:
@@ -52,104 +150,72 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
-
-  /v1/students:
+  /v1/students/:
     get:
       tags:
         - students
-      summary: get students only data information
+      summary: get students information
       responses:
         "200":
-          description: get students only data information success
+          description: get students information success
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/students"
+                  $ref: "#/components/schemas/users"
+                minItems: 0
         "500":
           $ref: "#/components/responses/500"
-    post:
-      tags:
-        - students
-      summary: create a new student
-      requestBody:
-        $ref: "#/components/requestBodies/insertOrUpdateStudents"
-      responses:
-        "200":
-          description: create a new student success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: number
-                    example: 200
-                  status:
-                    type: string
-                    example: "OK"
-                  data:
-                    $ref: "#components/schemas/insertOrUpdateStudents"
-        "400":
-          $ref: "#/components/responses/400"
-        "500":
-          $ref: "#/components/responses/500"
-
   /v1/students/{id}:
     get:
       tags:
         - students
-      summary: get a student only data information
+      summary: get a student only information
       parameters:
-        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/schemas/users"
       responses:
         "200":
-          description: get a student only data success
+          description: get students information success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/students"
-        "404":
-          $ref: "#/components/responses/404"
+                $ref: "#/components/schemas/users"
+
         "500":
           $ref: "#/components/responses/500"
-    patch:
-      summary: update a student information
+
+  /v1/instructors:
+    get:
       tags:
-        - students
-      parameters:
-        - $ref: "#components/parameters/id"
-      requestBody:
-        $ref: "#/components/requestBodies/insertOrUpdateStudents"
+        - instructors
       responses:
         "200":
-          description: update a student information success
+          description: get students information success
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/insertOrUpdateStudents"
-        "400":
-          $ref: "#/components/responses/400"
-        "404":
-          $ref: "#/components/responses/404"
+                type: array
+                items:
+                  $ref: "#/components/schemas/users"
+                minItems: 0
         "500":
           $ref: "#/components/responses/500"
-    delete:
+  /v1/instructors/{id}:
+    get:
       tags:
-        - students
-      summary: delete a student data only
+        - instructors
+      summary: get a student only information
       parameters:
-        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/schemas/users"
       responses:
         "200":
-          description: delete a student data success
+          description: get students information success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/delete"
-        "404":
-          $ref: "#/components/responses/404"
+                $ref: "#/components/schemas/users"
+
         "500":
           $ref: "#/components/responses/500"
 
@@ -186,7 +252,6 @@ paths:
           $ref: "#/components/responses/400"
         "500":
           $ref: "#/components/responses/500"
-
   /v1/classes/{id}:
     get:
       summary: get a specific class
@@ -244,20 +309,20 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
-  # /v1/studies/:
-  #   post:
-  #     tags:
-  #       - studies
-  #     summary: add a study data
-  #     requestBody:
-  #       $ref: "#/components/requestBodies/insertOrUpdateStudies"
-  #     responses:
-  #       "200":
-  #         description: add a study data success
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: "#/components/schemas/insertOrUpdateStudies"
+  /v1/studies/:
+    post:
+      tags:
+        - studies
+      summary: add a study data
+      requestBody:
+        $ref: "#/components/requestBodies/insertOrUpdateStudies"
+      responses:
+        "200":
+          description: add a study data success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/insertOrUpdateStudies"
 
 components:
   schemas:
@@ -277,16 +342,12 @@ components:
         students:
           type: array
           items:
-            $ref: "#/components/schemas/students"
+            $ref: "#/components/schemas/users"
         instructors:
           type: array
           items:
-            $ref: "#/components/schemas/instructors"
+            $ref: "#/components/schemas/users"
           minimum: 0
-        assignments:
-          type: array
-          items:
-            $ref: "#/components/schemas/assignments"
         status:
           type: string
           enum:
@@ -296,6 +357,9 @@ components:
             - cancelled
           default: scheduled
           example: scheduled
+        schedule:
+          type: string
+          format: date-time
         notes:
           type: string
           example: trial class for newcomers
@@ -303,7 +367,35 @@ components:
       minProperties: 2
       additionalProperties: false
 
-    instructors:
+    classes-only:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: as8ohr43843n
+        name:
+          type: string
+          example: mathematics
+        status:
+          type: string
+          enum:
+            - scheduled
+            - ongoing
+            - completed
+            - cancelled
+          default: scheduled
+          example: scheduled
+        schedule:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          example: trial class for newcomers
+          nullable: true
+      minProperties: 2
+      additionalProperties: false
+
+    users:
       type: object
       properties:
         _id:
@@ -312,6 +404,12 @@ components:
         name:
           type: string
           example: "Noora"
+        role:
+          type: string
+          enum:
+            - instructor
+            - student
+          example: instructor
         created_date:
           type: string
           format: date-time
@@ -321,22 +419,6 @@ components:
       minProperties: 2
       maxProperties: 5
       additionalProperties: false
-
-    students:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: b12asdf23ksa3
-        name:
-          type: string
-          example: Joko
-        created_date:
-          type: string
-          format: date-time
-        updated_date:
-          type: string
-          format: date-time
 
     students-profile:
       type: object
@@ -361,36 +443,6 @@ components:
       maxProperties: 5
       additionalProperties: false
 
-    assignments:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: f289huiayf98as
-        name:
-          type: string
-          example: Practice yoga
-        due:
-          type: string
-          format: date-time
-        status:
-          type: string
-          enum:
-            - todo
-            - working
-            - done
-          default: todo
-          example: todo
-        grade:
-          type: number
-          minimum: 0
-          maximum: 100
-          nullable: true
-          default: null
-          example: 80
-      minProperties: 2
-      additionalProperties: false
-
     errors:
       type: object
       properties:
@@ -404,7 +456,17 @@ components:
             error:
               type: string
 
-    insertOrUpdateStudents:
+    insertUsers:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Joko"
+        role:
+          type: string
+          example: student
+
+    updateUsers:
       type: object
       properties:
         name:
@@ -435,18 +497,25 @@ components:
           nullable: true
 
     insertOrUpdateStudies:
-      type: object
-      properties:
-        class_id:
-          type: string
-        student_id:
-          type: string
-        instructor_id:
-          type: string
-        assignment_id:
-          type: string
-      required:
-        - class_id
+      type: array
+      items:
+        type: object
+        properties:
+          class_id:
+            type: string
+            example: as8ohr43843n
+          student_id:
+            type: string
+            example: n2kohvj23kl
+          instructor_id:
+            type: string
+            nullable: true
+          assignment_id:
+            type: string
+            nullable: true
+        required:
+          - class_id
+          - student_id
 
     delete:
       type: object
@@ -467,13 +536,20 @@ components:
       description: id of specified resource
 
   requestBodies:
-    insertOrUpdateStudents:
-      description: Request body to insert and update students
+    insertUsers:
+      description: Request body to insert and update users
       required: true
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/insertOrUpdateStudents"
+            $ref: "#/components/schemas/insertUsers"
+    updateUsers:
+      description: Request body to insert and update users
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/updateUsers"
     insertOrUpdateClasses:
       description: Request body to insert and update classes
       required: true
