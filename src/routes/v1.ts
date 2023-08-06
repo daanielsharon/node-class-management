@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { students } from "./students.ts";
-import { teachers } from "./teachers.ts";
+import { students } from "./student";
+import { instructors } from "./instructor";
 
 export const v1 = Router();
 v1.use("/students", students);
-v1.use("/teachers", teachers);
+v1.use("/instructors", instructors);
