@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { students } from "./student";
-import { instructors } from "./instructor";
+import { students } from "./student.ts";
+import { instructors } from "./instructor.ts";
 
 export const v1 = Router();
 v1.use("/students", students);

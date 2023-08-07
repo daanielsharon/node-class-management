@@ -1,4 +1,4 @@
-import winston from "../../node_modules/winston/index";
+import winston from "winston";
 
 export const logger = winston.createLogger({
   level: "error",
