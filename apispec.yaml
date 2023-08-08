@@ -317,14 +317,14 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
       requestBody:
-        $ref: "#/components/requestBodies/insertOrDeleteClassStudents"
+        $ref: "#/components/requestBodies/insertClassStudents"
       responses:
         "200":
           description: add student(s) to a class
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/insertOrDeleteClassStudents"
+                $ref: "#/components/schemas/insertClassStudents"
         "404":
           $ref: "#/components/responses/404"
         "500":
@@ -336,14 +336,14 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
       requestBody:
-        $ref: "#/components/requestBodies/insertOrDeleteClassStudents"
+        $ref: "#/components/requestBodies/deleteClassStudents"
       responses:
         "200":
           description: delete student(s) success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/insertOrDeleteClassStudents"
+                $ref: "#/components/schemas/deleteClassStudents"
 
   /v1/classes/{id}/instructors:
     post:
@@ -353,14 +353,14 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
       requestBody:
-        $ref: "#/components/requestBodies/insertOrDeleteClassInstructors"
+        $ref: "#/components/requestBodies/insertClassInstructors"
       responses:
         "200":
           description: add student(s) to a class
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/insertOrDeleteClassInstructors"
+                $ref: "#/components/schemas/insertClassInstructors"
         "404":
           $ref: "#/components/responses/404"
         "500":
@@ -372,14 +372,14 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
       requestBody:
-        $ref: "#/components/requestBodies/insertOrDeleteClassStudents"
+        $ref: "#/components/requestBodies/deleteClassInstructors"
       responses:
         "200":
           description: delete student(s) success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/insertOrDeleteClassStudents"
+                $ref: "#/components/schemas/deleteClassInstructors"
 
 components:
   schemas:
@@ -555,7 +555,7 @@ components:
           example: trial class for newcomers
           nullable: true
 
-    insertOrDeleteClassStudents:
+    insertClassStudents:
       type: object
       properties:
         students:
@@ -564,13 +564,46 @@ components:
             $ref: "#/components/schemas/users"
       minItems: 1
 
-    insertOrDeleteClassInstructors:
+    deleteClassStudents:
       type: object
       properties:
         students:
+          type: object
+          properties:
+            studentId:
+              type: array
+              items:
+                type: string
+                example: n2kohvj23kl
+            class_id:
+              type: string
+              example: as8ohr43843n
+      minItems: 1
+
+    insertClassInstructors:
+      type: object
+      properties:
+        instructors:
           type: array
           items:
             $ref: "#/components/schemas/users"
+      minItems: 1
+
+    deleteClassInstructors:
+      type: object
+      properties:
+        instructors:
+          type: object
+          properties:
+            studentId:
+              type: array
+              items:
+                type: string
+                example: n2kohvj23kl
+              minItems: 1
+            class_id:
+              type: string
+              example: as8ohr43843n
       minItems: 1
 
     delete:
@@ -613,20 +646,34 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/insertOrUpdateClasses"
-    insertOrDeleteClassStudents:
-      description: request body to insert or delete students in a class
+    insertClassStudents:
+      description: request body to insert students in a class
       required: true
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/insertOrDeleteClassStudents"
-    insertOrDeleteClassInstructors:
+            $ref: "#/components/schemas/insertClassStudents"
+    deleteClassStudents:
+      description: request body to delete students in a class
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/deleteClassStudents"
+    insertClassInstructors:
       description: request body to insert or delete instructors in a class
       required: true
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/insertOrDeleteClassInstructors"
+            $ref: "#/components/schemas/insertClassInstructors"
+    deleteClassInstructors:
+      description: request body to insert or delete instructors in a class
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/deleteClassInstructors"
 
   responses:
     "400":

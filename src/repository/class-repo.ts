@@ -1,19 +1,20 @@
 import { ObjectId } from "mongodb";
-import { pool } from "../pool.ts";
-import { UserCreate, UserUpdate } from "../ts/interfaces/user.js";
-import { logger } from "../app/logger.ts";
-import { ResponseError } from "../error/response-error.ts";
+import { logger } from "../app/logger.js";
+import { ResponseError } from "../error/response-error.js";
+import { pool } from "../pool.js";
+import { ClassCreate, ClassUpdate } from "../ts/interfaces/class.js";
 
-const userDependency = ["students", "instructors"];
-class UserRepo {
-  static collection: string = "users";
+const classDependency = ["students", "instructors"];
+
+class ClassRepo {
+  static collection: string = "classes";
 
   static get() {
     try {
       const res = pool.query().collection(this.collection).find({});
       return res;
     } catch (error) {
-      logger.error("get users error", error);
+      logger.error("get class error", error);
       if (error instanceof Error) {
         throw new ResponseError(500, error.message);
       }
@@ -22,50 +23,52 @@ class UserRepo {
 
   static getById(id: ObjectId) {
     try {
-      const res = pool.query().collection(this.collection).findOne({
+      const res = pool.query().collection("classes").findOne({
         _id: id,
       });
 
       return res;
     } catch (error) {
-      logger.error("get user by id error", error);
+      logger.error("get class by id error", error);
       if (error instanceof Error) {
         throw new ResponseError(500, error.message);
       }
     }
   }
 
-  static save({ name, role }: UserCreate) {
+  static save({ name, room, status, notes }: ClassCreate) {
     try {
       pool.query().collection(this.collection).insertOne({
         name,
-        role,
+        room,
+        status,
+        notes,
       });
     } catch (error) {
-      logger.error("create user error", error);
+      logger.error("create class error", error);
       if (error instanceof Error) {
         throw new ResponseError(500, error.message);
       }
     }
   }
 
-  static update(user: UserUpdate) {
+  static update({ id, name, room, status, notes }: ClassUpdate) {
     try {
-      pool
-        .query()
-        .collection(this.collection)
-        .updateOne(
-          {
-            _id: user.id,
+      pool.query().collection(this.collection).updateOne(
+        {
+          _id: id,
+        },
+        {
+          $set: {
+            name,
+            room,
+            status,
+            notes,
           },
-          {
-            $set: {
-              name: user.name,
-            },
-          }
-        );
+        }
+      );
     } catch (error) {
-      logger.error("update user error", error);
+      logger.error("update class error", error);
       if (error instanceof Error) {
         throw new ResponseError(500, error.message);
       }
@@ -78,7 +81,7 @@ class UserRepo {
         _id: id,
       });
     } catch (error) {
-      logger.error("delete user error", error);
+      logger.error("delete class error", error);
       if (error instanceof Error) {
         throw new ResponseError(500, error.message);
       }
@@ -86,4 +89,4 @@ class UserRepo {
   }
 }
 
-export default UserRepo;
+export default ClassRepo;
