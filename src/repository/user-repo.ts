@@ -35,11 +35,27 @@ class UserRepo {
     }
   }
 
-  static save({ name, role }: UserCreate) {
+  static getByEmail(email: string) {
+    try {
+      const res = pool.query().collection(this.collection).findOne({
+        email,
+      });
+
+      return res;
+    } catch (error) {
+      logger.error("get by email error", error);
+      if (error instanceof Error) {
+        throw new ResponseError(500, error.message);
+      }
+    }
+  }
+
+  static save({ name, role, email }: UserCreate) {
     try {
       pool.query().collection(this.collection).insertOne({
         name,
         role,
+        email,
       });
     } catch (error) {
       logger.error("create user error", error);

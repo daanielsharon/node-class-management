@@ -1,5 +1,5 @@
 import { Router } from "express";
 
-export const students = Router();
+export const student = Router();
 
-students.get("/");
+student.get("/");

@@ -25,6 +25,7 @@ paths:
                   $ref: "#/components/schemas/users"
         "500":
           $ref: "#/components/responses/500"
+  /v1/users/register:
     post:
       tags:
         - users
@@ -33,7 +34,34 @@ paths:
         $ref: "#/components/requestBodies/insertUsers"
       responses:
         "200":
-          description: create a new student success
+          description: create a new user success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    example: 200
+                  status:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#components/schemas/insertUsers"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+  /v1/users/login:
+    post:
+      tags:
+        - users
+      summary: user login
+      requestBody:
+        $ref: "#/components/requestBodies/insertUsers"
+      responses:
+        "200":
+          description: login user success
           content:
             application/json:
               schema:
@@ -458,6 +486,10 @@ components:
         _id:
           type: string
           example: n2kohvj23kl
+        email:
+          type: string
+          format: email
+          example: Noora@noralo.com
         name:
           type: string
           example: "Noora"
@@ -478,6 +510,7 @@ components:
       additionalProperties: false
       required:
         - name
+        - email
 
     students-profile:
       type: object
@@ -518,6 +551,9 @@ components:
     insertUsers:
       type: object
       properties:
+        email:
+          type: string
+          example: Joko@joko.com
         name:
           type: string
           example: "Joko"

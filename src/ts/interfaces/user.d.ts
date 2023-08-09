@@ -3,6 +3,11 @@ import { ObjectId } from "mongodb";
 interface UserCreate {
   name: string;
   role: string;
+  email: string;
+}
+
+interface UserLogin {
+  email: string;
 }
 
 interface UserUpdate {
@@ -10,4 +15,4 @@ interface UserUpdate {
   name: string;
 }
 
-export { UserCreate, UserUpdate };
+export { UserCreate, UserLogin, UserUpdate };

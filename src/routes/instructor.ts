@@ -1,4 +1,4 @@
 import { Router } from "express";
 
-export const instructors = Router();
-instructors.get("/");
+export const instructor = Router();
+instructor.get("/");
