@@ -8,13 +8,16 @@ class Pool {
 
   async connect({ username, password, port }: Connection): Promise<void> {
     this.uri = `mongodb://${username}:${password}@localhost:${port}`;
-    this.client = new MongoClient(this.uri);
+    this.client = new MongoClient(this.uri, {
+      connectTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 500,
+    });
     await this.client.connect();
     await this.client.db("management").command({ ping: 1 });
     logger.info(`connected to ${process.env.MONGO_DATABASE} database`);
   }
 
-  async close() {
+  close() {
     this.client?.close();
   }
 

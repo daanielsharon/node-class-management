@@ -52,11 +52,12 @@ class UserRepo {
 
   static save({ name, role, email }: UserCreate) {
     try {
-      pool.query().collection(this.collection).insertOne({
+      const res = pool.query().collection(this.collection).insertOne({
         name,
         role,
         email,
       });
+      return res;
     } catch (error) {
       logger.error("create user error", error);
       if (error instanceof Error) {

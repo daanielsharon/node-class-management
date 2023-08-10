@@ -16,7 +16,7 @@ class ResponseJson {
   };
 
   static 200(res: Response, data: any) {
-    res
+    return res
       .status(200)
       .json({
         code: 200,
@@ -27,7 +27,7 @@ class ResponseJson {
   }
 
   static 500(res: Response, err: { error: string }) {
-    res
+    return res
       .status(500)
       .json({
         code: 500,
@@ -38,7 +38,7 @@ class ResponseJson {
   }
 
   static unknown(res: Response, code: Code, err: { error: string }) {
-    res
+    return res
       .status(code)
       .json({
         code,

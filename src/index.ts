@@ -1,8 +1,9 @@
+import { logger } from "./app/logger.ts";
 import { app } from "./app/web.ts";
 import { pool } from "./pool.ts";
 import "dotenv/config";
 
-const port: number = 3000;
+const port: number = 8080;
 
 pool
   .connect({
@@ -14,4 +15,5 @@ pool
     app.listen(port, () => {
       console.log(`Listening on port ${port}`);
     })
-  );
+  )
+  .catch((err) => logger.error(err.message));

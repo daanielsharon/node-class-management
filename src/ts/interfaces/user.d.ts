@@ -1,9 +1,18 @@
+import { extend } from "joi";
 import { ObjectId } from "mongodb";
 
 interface UserCreate {
   name: string;
   role: string;
   email: string;
+}
+
+interface UserCreateRepo extends UserCreate {
+  _id: ObjectId;
+}
+
+interface UserCreateResponse extends UserCreate {
+  id: ObjectId;
 }
 
 interface UserLogin {
@@ -15,4 +24,10 @@ interface UserUpdate {
   name: string;
 }
 
-export { UserCreate, UserLogin, UserUpdate };
+export {
+  UserCreate,
+  UserCreateRepo,
+  UserCreateResponse,
+  UserLogin,
+  UserUpdate,
+};
