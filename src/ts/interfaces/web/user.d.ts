@@ -20,7 +20,6 @@ interface UserLogin {
 }
 
 interface UserUpdate {
-  id: ObjectId;
   name: string;
 }
 

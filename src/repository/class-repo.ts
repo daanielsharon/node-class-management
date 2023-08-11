@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { logger } from "../app/logger.js";
 import { ResponseError } from "../error/response-error.js";
 import { pool } from "../pool.js";
-import { ClassCreate, ClassUpdate } from "../ts/interfaces/class.js";
+import { ClassCreate, ClassUpdate } from "../ts/interfaces/web/class.js";
 
 const classDependency = ["students", "instructors"];
 

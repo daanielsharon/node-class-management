@@ -3,7 +3,7 @@ import { ResponseError } from "../../error/response-error.ts";
 import {
   ClassInstructorCreate,
   ClassInstructorDelete,
-} from "../../ts/interfaces/class.js";
+} from "../../ts/interfaces/web/class.js";
 import { pool } from "../../pool.ts";
 
 type ClassInstructor = {

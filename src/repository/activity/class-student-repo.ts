@@ -4,7 +4,7 @@ import { pool } from "../../pool.ts";
 import {
   ClassStudentCreate,
   ClassStudentDelete,
-} from "../../ts/interfaces/class.js";
+} from "../../ts/interfaces/web/class.js";
 
 type ClassStudent = {
   students: ClassStudentCreate;

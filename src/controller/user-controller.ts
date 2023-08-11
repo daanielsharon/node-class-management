@@ -19,7 +19,6 @@ class UserController {
   }
 
   static async login(request: Request, response: Response, next: NextFunction) {
-    console.log("executed controller");
     try {
       const result = await UserService.login(request.body);
       ResponseJson[200](response, result);
