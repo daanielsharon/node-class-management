@@ -1,14 +1,8 @@
 import { logger } from "../../app/logger.ts";
 import { ResponseError } from "../../error/response-error.ts";
 import { pool } from "../../pool.ts";
-import {
-  ClassStudentCreate,
-  ClassStudentDelete,
-} from "../../ts/interfaces/web/class.js";
-
-type ClassStudent = {
-  students: ClassStudentCreate;
-};
+import { ClassStudent } from "../../ts/types/web/class/class-student.js";
+import { ClassStudentDelete } from "../../ts/types/web/class/class.js";
 
 class ClassStudentRepo {
   static collection: string = "students";

@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Code } from "../ts/types/response.js";
+import { Code } from "../ts/enum/response.js";
 
 type StatusToString = {
   [key: number]: string;

@@ -6,7 +6,7 @@ import {
   UserCreateResponse,
   UserLogin,
   UserUpdate,
-} from "../ts/interfaces/web/user.js";
+} from "../ts/types/web/user.js";
 import { validate } from "../validation/validation.ts";
 import UserValidation from "../validation/user-validation.ts";
 

@@ -1,9 +1,9 @@
 import { ObjectId, WithId } from "mongodb";
 import { pool } from "../pool.ts";
-import { UserCreate, UserUpdate } from "../ts/interfaces/web/user.js";
+import { UserCreate, UserUpdate } from "../ts/types/web/user.js";
 import { logger } from "../app/logger.ts";
 import { ResponseError } from "../error/response-error.ts";
-import { DomainUser, DomainUserUpdate } from "../ts/interfaces/domain/user.js";
+import { DomainUser, DomainUserUpdate } from "../ts/types/domain/user.js";
 
 const userDependency = ["students", "instructors"];
 

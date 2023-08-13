@@ -1,42 +1,36 @@
 import { ObjectId } from "mongodb";
+import { ClassStatus } from "../../../enum/class.js";
 
-enum ClassStatus {
-  "scheduled",
-  "ongoing",
-  "completed",
-  "cancelled",
-}
-
-interface ClassCreate {
+type ClassCreate = {
   name: string;
   room: number;
   status: ClassStatus;
   notes: string;
-}
+};
 
-interface ClassUpdate extends ClassCreate {
+type ClassUpdate = ClassCreate & {
   id: ObjectId;
-}
+};
 
-interface ClassId {
+type ClassId = {
   classId: ObjectId;
-}
+};
 
 interface ClassStudentCreate extends ClassId, Array<ClassStudentCreate> {
   studentId: ObjectId;
 }
 
-interface ClassStudentDelete extends ClassId {
+type ClassStudentDelete = ClassId & {
   studentId: ObjectId[];
-}
+};
 
-interface ClassInstructorCreate extends ClassId, Array<ClassInstructorCreate> {
+type ClassInstructorCreate = ClassId & {
   instructorId: ObjectId;
-}
+};
 
-interface ClassInstructorDelete extends ClassId {
+type ClassInstructorDelete = ClassId & {
   instructorId: ObjectId[];
-}
+};
 
 export {
   ClassCreate,

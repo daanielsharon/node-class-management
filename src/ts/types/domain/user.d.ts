@@ -1,15 +1,15 @@
-interface DomainUser {
+type DomainUser = {
   _id?: ObjectId;
   email: string;
   name: string;
   role: string;
   created_at: Date;
   updated_at: Date;
-}
+};
 
-interface DomainUserUpdate {
+type DomainUserUpdate = {
   id: number;
   name: string;
-}
+};
 
 export { DomainUser, DomainUserUpdate };

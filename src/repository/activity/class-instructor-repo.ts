@@ -1,14 +1,8 @@
 import { logger } from "../../app/logger.ts";
 import { ResponseError } from "../../error/response-error.ts";
-import {
-  ClassInstructorCreate,
-  ClassInstructorDelete,
-} from "../../ts/interfaces/web/class.js";
 import { pool } from "../../pool.ts";
-
-type ClassInstructor = {
-  instructors: ClassInstructorCreate;
-};
+import { ClassInstructor } from "../../ts/types/web/class/class-instructor.js";
+import { ClassInstructorDelete } from "../../ts/types/web/class/class.js";
 
 class ClassInstructorRepo {
   static collection: string = "insturctors";

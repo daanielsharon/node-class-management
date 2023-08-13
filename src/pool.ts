@@ -1,12 +1,16 @@
 import { Db, MongoClient } from "mongodb";
 import { logger } from "./app/logger.ts";
-import { Connection } from "./ts/types/connection.js";
+import { ConnectionPool } from "./ts/interfaces/connection.js";
 
-class Pool {
+class Pool implements ConnectionPool {
   uri: string | null = null;
   client: MongoClient | null = null;
 
-  async connect({ username, password, port }: Connection): Promise<void> {
+  async connect(
+    username: string | undefined,
+    password: string | undefined,
+    port: string | undefined
+  ): Promise<void> {
     this.uri = `mongodb://${username}:${password}@localhost:${port}`;
     this.client = new MongoClient(this.uri, {
       connectTimeoutMS: 5000,
