@@ -12,6 +12,6 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof ResponseError) {
     ResponseJson.unknown(res, err.status as Code, { error: err.message });
   } else {
-    ResponseJson[500];
+    ResponseJson[500](res, err);
   }
 };

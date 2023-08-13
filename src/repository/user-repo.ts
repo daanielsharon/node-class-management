@@ -1,18 +1,33 @@
-import { ObjectId, WithId } from "mongodb";
-import { pool } from "../pool.ts";
-import { UserCreate, UserUpdate } from "../ts/types/web/user.js";
+import { ObjectId } from "mongodb";
 import { logger } from "../app/logger.ts";
 import { ResponseError } from "../error/response-error.ts";
+import { pool } from "../pool.ts";
 import { DomainUser, DomainUserUpdate } from "../ts/types/domain/user.js";
+import { UserCreate } from "../ts/types/web/user.js";
 
 const userDependency = ["students", "instructors"];
 
 class UserRepo {
   static collection: string = "users";
 
-  static get() {
+  static async get() {
     try {
-      const res = pool.query().collection<DomainUser>(this.collection).find({});
+      const res = await pool
+        .query()
+        .collection<DomainUser>(this.collection)
+        .find(
+          {},
+          {
+            projection: {
+              _id: 1,
+              name: 1,
+              role: 1,
+              email: 1,
+            },
+          }
+        )
+        .toArray();
+
       return res;
     } catch (error) {
       logger.error("get users error", error);
@@ -28,9 +43,7 @@ class UserRepo {
         .query()
         .collection<DomainUser>(this.collection)
         .findOne({
-          _id: {
-            $oid: id,
-          },
+          _id: new ObjectId(id),
         });
 
       return res;
@@ -81,16 +94,14 @@ class UserRepo {
     }
   }
 
-  static update(user: DomainUserUpdate) {
+  static async update(user: DomainUserUpdate) {
     try {
-      pool
+      const res = await pool
         .query()
         .collection(this.collection)
         .updateOne(
           {
-            _id: {
-              $oid: user.id,
-            },
+            _id: new ObjectId(user.id),
           },
           {
             $set: {
@@ -98,6 +109,7 @@ class UserRepo {
             },
           }
         );
+      return res;
     } catch (error) {
       logger.error("update user error", error);
       if (error instanceof Error) {
@@ -106,11 +118,14 @@ class UserRepo {
     }
   }
 
-  static async delete(id: ObjectId) {
+  static async delete(id: string) {
     try {
-      await pool.query().collection(this.collection).deleteOne({
-        _id: id,
-      });
+      await pool
+        .query()
+        .collection(this.collection)
+        .deleteOne({
+          _id: new ObjectId(id),
+        });
     } catch (error) {
       logger.error("delete user error", error);
       if (error instanceof Error) {

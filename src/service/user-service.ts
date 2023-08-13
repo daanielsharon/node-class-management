@@ -41,17 +41,8 @@ class UserService {
     throw new ResponseError(404, "no user found");
   }
 
-  static get() {
-    let response = UserRepo.get();
-
-    response?.map((item) => ({
-      id: item._id,
-      email: item.email,
-      name: item.name,
-      created_at: item.created_at,
-      updated_at: item.updated_at,
-    }));
-
+  static async get() {
+    let response = await UserRepo.get();
     return response;
   }
 
@@ -71,6 +62,21 @@ class UserService {
 
   static async update(request: Request, id: string) {
     const { name }: UserUpdate = validate(UserValidation.names, request);
+
+    const res = await UserRepo.getById(id);
+    if (!res) throw new ResponseError(404, "no user found");
+
+    const response = await UserRepo.update({ id, name });
+    if (response) {
+      return { name };
+    }
+  }
+
+  static async delete(id: string) {
+    const res = await UserRepo.getById(id);
+    if (!res) throw new ResponseError(404, "no user found");
+
+    await UserRepo.delete(id);
   }
 }
 

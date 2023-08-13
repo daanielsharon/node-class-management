@@ -8,7 +8,7 @@ type DomainUser = {
 };
 
 type DomainUserUpdate = {
-  id: number;
+  id: string;
   name: string;
 };
 
