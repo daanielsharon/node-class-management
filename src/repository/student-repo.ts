@@ -79,16 +79,16 @@ class StudentRepo {
               as: "classes",
             },
           },
-          // {
-          //   $project: {
-          //     "classes._id": 1,
-          //     "classes.name": 1,
-          //     "classes.room": 1,
-          //     "classes.status": 1,
-          //     "classes.schedule": 1,
-          //     "classes.notes": 1,
-          //   },
-          // },
+          {
+            $project: {
+              "classes._id": 1,
+              "classes.name": 1,
+              "classes.room": 1,
+              "classes.status": 1,
+              "classes.schedule": 1,
+              "classes.notes": 1,
+            },
+          },
         ])
         .toArray();
 
