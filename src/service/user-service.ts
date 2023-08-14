@@ -9,6 +9,7 @@ import {
 } from "../ts/types/web/user.js";
 import { validate } from "../validation/validation.ts";
 import UserValidation from "../validation/user-validation.ts";
+import Util from "../util/id.ts";
 
 class UserService {
   static async register(request: Request): Promise<UserCreateResponse> {
@@ -43,7 +44,11 @@ class UserService {
 
   static async get() {
     let response = await UserRepo.get();
-    return response;
+
+    if (response) {
+      const newResponse = Util.transformId(response);
+      return newResponse;
+    }
   }
 
   static async getById(id: string) {

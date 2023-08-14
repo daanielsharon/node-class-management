@@ -2,15 +2,32 @@ import { ObjectId } from "mongodb";
 import { pool } from "../pool.ts";
 import { logger } from "../app/logger.ts";
 import { ResponseError } from "../error/response-error.ts";
+import {
+  DomainStudent,
+  DomainStudentClass,
+} from "../ts/types/domain/student.js";
 
 class StudentRepo {
   static collection: string = "users";
 
-  static get() {
+  static async get() {
     try {
-      const res = pool.query().collection(this.collection).find({
-        role: "student",
-      });
+      const res = await pool
+        .query()
+        .collection<DomainStudent>(this.collection)
+        .find(
+          {
+            role: "student",
+          },
+          {
+            projection: {
+              _id: 1,
+              email: 1,
+              name: 1,
+            },
+          }
+        )
+        .toArray();
       return res;
     } catch (error) {
       logger.error("get students error", error);
@@ -20,12 +37,24 @@ class StudentRepo {
     }
   }
 
-  static getById(id: ObjectId) {
+  static async getById(id: string) {
     try {
-      const res = pool.query().collection(this.collection).findOne({
-        _id: id,
-        role: "student",
-      });
+      const res = await pool
+        .query()
+        .collection<DomainStudent>(this.collection)
+        .findOne(
+          {
+            _id: new ObjectId(id),
+            role: "student",
+          },
+          {
+            projection: {
+              _id: 1,
+              email: 1,
+              name: 1,
+            },
+          }
+        );
 
       return res;
     } catch (error) {
@@ -36,11 +65,11 @@ class StudentRepo {
     }
   }
 
-  static getProfile() {
+  static async getProfile() {
     try {
-      const res = pool
+      const res = await pool
         .query()
-        .collection(this.collection)
+        .collection<DomainStudentClass>(this.collection)
         .aggregate([
           {
             $lookup: {
@@ -50,7 +79,18 @@ class StudentRepo {
               as: "classes",
             },
           },
-        ]);
+          // {
+          //   $project: {
+          //     "classes._id": 1,
+          //     "classes.name": 1,
+          //     "classes.room": 1,
+          //     "classes.status": 1,
+          //     "classes.schedule": 1,
+          //     "classes.notes": 1,
+          //   },
+          // },
+        ])
+        .toArray();
 
       return res;
     } catch (error) {
@@ -61,15 +101,15 @@ class StudentRepo {
     }
   }
 
-  static getProfileById(id: ObjectId) {
+  static async getProfileById(id: string) {
     try {
-      const res = pool
+      const res = await pool
         .query()
-        .collection(this.collection)
+        .collection<DomainStudentClass>(this.collection)
         .aggregate([
           {
             $match: {
-              _id: id,
+              _id: new ObjectId(id),
             },
           },
           {
@@ -80,7 +120,18 @@ class StudentRepo {
               as: "classes",
             },
           },
-        ]);
+          {
+            $project: {
+              "classes._id": 1,
+              "classes.name": 1,
+              "classes.room": 1,
+              "classes.status": 1,
+              "classes.schedule": 1,
+              "classes.notes": 1,
+            },
+          },
+        ])
+        .toArray();
 
       return res;
     } catch (error) {

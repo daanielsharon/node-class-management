@@ -506,12 +506,12 @@ components:
             - instructor
             - student
           example: instructor
-        created_date:
-          type: string
-          format: date-time
-        updated_date:
-          type: string
-          format: date-time
+        # created_date:
+        #   type: string
+        #   format: date-time
+        # updated_date:
+        #   type: string
+        #   format: date-time
       minProperties: 2
       maxProperties: 5
       additionalProperties: false
@@ -528,16 +528,19 @@ components:
         name:
           type: string
           example: "Joko"
+        email:
+          type: string
+          example: Joko@joko.com
         classes:
           type: array
           items:
-            $ref: "#/components/schemas/classes"
-        created_date:
-          type: string
-          format: date-time
-        updated_date:
-          type: string
-          format: date-time
+            $ref: "#/components/schemas/classes-only"
+        # created_date:
+        #   type: string
+        #   format: date-time
+        # updated_date:
+        #   type: string
+        #   format: date-time
       minProperties: 5
       maxProperties: 5
       additionalProperties: false

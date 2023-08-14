@@ -32,10 +32,10 @@ Accept: application/json
 GET http://localhost:8080/api/v1/users/
 
 ###
-GET http://localhost:8080/api/v1/users/64d8659ec7984dac44a70410
+GET http://localhost:8080/api/v1/users/64d98113b99e9a59a18e23eb
 
 ###
-PATCH http://localhost:8080/api/v1/users/64d8659ec7984dac44a70410
+PATCH http://localhost:8080/api/v1/users/64d98113b99e9a59a18e23eb
 Accept: application/json
 Content-Type: application/json
 
@@ -45,3 +45,15 @@ Content-Type: application/json
 
 ### 
 DELETE http://localhost:8080/api/v1/users/64d88a20862d436d26326484
+
+###
+GET http://localhost:8080/api/v1/students/
+
+### 
+GET http://localhost:8080/api/v1/students/64d98115b99e9a59a18e23ec
+
+###
+GET http://localhost:8080/api/v1/students/profile/
+
+###
+GET http://localhost:8080/api/v1/students/profile/64d98115b99e9a59a18e23ec
