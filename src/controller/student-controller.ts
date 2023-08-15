@@ -34,7 +34,6 @@ class StudentController {
     next: NextFunction
   ) {
     try {
-      console.log("executed get profile");
       const result = await StudentService.getProfile();
       ResponseJson[200](response, result);
     } catch (error) {

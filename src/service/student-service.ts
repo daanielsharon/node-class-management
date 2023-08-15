@@ -21,7 +21,6 @@ class StudentService {
   }
 
   static async getProfile() {
-    console.log("get profile executed");
     const res = await StudentRepo.getProfile();
     if (res) {
       const newRes = Util.transformId(res);

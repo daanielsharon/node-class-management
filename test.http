@@ -14,10 +14,34 @@ Content-Type: application/json
 Accept: application/json
 
 {
+    "email": "c@c.com",
+    "name": "c",
+    "role": "instructor"
+}
+
+###
+POST http://localhost:8080/api/v1/users/register
+Content-Type: application/json 
+Accept: application/json
+
+{
     "email": "a@a.com",
     "name": "a",
     "role": "student"
 }
+
+
+###
+POST http://localhost:8080/api/v1/users/register
+Content-Type: application/json 
+Accept: application/json
+
+{
+    "email": "b@b.com",
+    "name": "b",
+    "role": "student"
+}
+
 
 ###
 POST http://localhost:8080/api/v1/users/login
@@ -32,10 +56,10 @@ Accept: application/json
 GET http://localhost:8080/api/v1/users/
 
 ###
-GET http://localhost:8080/api/v1/users/64d98113b99e9a59a18e23eb
+GET http://localhost:8080/api/v1/users/64dafc79f1628a03be1ebcf2
 
 ###
-PATCH http://localhost:8080/api/v1/users/64d98113b99e9a59a18e23eb
+PATCH http://localhost:8080/api/v1/users/64dafc79f1628a03be1ebcf2
 Accept: application/json
 Content-Type: application/json
 
@@ -44,16 +68,24 @@ Content-Type: application/json
 }
 
 ### 
-DELETE http://localhost:8080/api/v1/users/64d88a20862d436d26326484
+DELETE http://localhost:8080/api/v1/users/64dafc79f1628a03be1ebcf2
 
-###
+### STUDENT
 GET http://localhost:8080/api/v1/students/
 
 ### 
-GET http://localhost:8080/api/v1/students/64da2df80fd929d114b9797d
+GET http://localhost:8080/api/v1/students/64dafc7bf1628a03be1ebcf3
 
 ###
 GET http://localhost:8080/api/v1/students/profile/
 
 ###
-GET http://localhost:8080/api/v1/students/profile/64da2df80fd929d114b9797d
+GET http://localhost:8080/api/v1/students/profile/64dafc79f1628a03be1ebcf2
+
+### INSTRUCTOR
+
+GET http://localhost:8080/api/v1/instructors
+
+###
+
+GET http://localhost:8080/api/v1/instructors/64dafcacf1628a03be1ebcf4
