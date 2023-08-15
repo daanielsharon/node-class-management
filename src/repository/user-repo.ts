@@ -9,8 +9,7 @@ import { CurrentCollection } from "../ts/enum/collection.js";
 const userDependency = ["students", "instructors"];
 
 class UserRepo {
-  static collection: string = "users";
-
+  static collection: string = CurrentCollection[CurrentCollection.users];
   static async get() {
     try {
       const res = await pool

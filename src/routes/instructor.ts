@@ -1,6 +1,6 @@
 import { Router } from "express";
 import InstructorController from "../controller/instructor-controller.ts";
 
-export const instructor = Router();
-instructor.get("/", InstructorController.get);
-instructor.get("/:id", InstructorController.getById);
+export const instructorRouter = Router();
+instructorRouter.get("/", InstructorController.get);
+instructorRouter.get("/:id", InstructorController.getById);

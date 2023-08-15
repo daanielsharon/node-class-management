@@ -6,7 +6,7 @@ import { DomainInstructor } from "../ts/types/domain/instructor.js";
 import { CurrentCollection } from "../ts/enum/collection.js";
 
 class InstructorRepo {
-  static collection: string = "users";
+  static collection: string = CurrentCollection[CurrentCollection.users];
 
   static async get() {
     try {

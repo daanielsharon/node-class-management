@@ -2,11 +2,11 @@ import { ObjectId } from "mongodb";
 import { logger } from "../app/logger.js";
 import { ResponseError } from "../error/response-error.js";
 import { pool } from "../pool.js";
-import { CurrentCollection } from "../ts/enum/collection.js";
 import {
   DomainClass,
   DomainClassCreateUpdate,
 } from "../ts/types/domain/class/class.js";
+import { CurrentCollection } from "../ts/enum/collection.ts";
 
 const classDependency = ["students", "instructors"];
 
@@ -21,10 +21,10 @@ class ClassRepo {
         .aggregate([
           {
             $lookup: {
-              from: CurrentCollection[CurrentCollection.classes],
+              from: CurrentCollection[CurrentCollection.students],
               localField: "_id",
               foreignField: "class_id",
-              as: CurrentCollection[CurrentCollection.classes],
+              as: CurrentCollection[CurrentCollection.students],
             },
           },
           {
@@ -37,6 +37,12 @@ class ClassRepo {
           },
           {
             $project: {
+              _id: 1,
+              name: 1,
+              room: 1,
+              status: 1,
+              schedule: 1,
+              notes: 1,
               "students.id": 1,
               "students.email": 1,
               "students.name": 1,
@@ -63,16 +69,16 @@ class ClassRepo {
         .collection<DomainClass>(this.collection)
         .aggregate([
           {
-            match: {
+            $match: {
               _id: new ObjectId(id),
             },
           },
           {
             $lookup: {
-              from: CurrentCollection[CurrentCollection.classes],
+              from: CurrentCollection[CurrentCollection.students],
               localField: "_id",
               foreignField: "class_id",
-              as: CurrentCollection[CurrentCollection.classes],
+              as: CurrentCollection[CurrentCollection.students],
             },
           },
           {
@@ -85,6 +91,12 @@ class ClassRepo {
           },
           {
             $project: {
+              _id: 1,
+              name: 1,
+              room: 1,
+              status: 1,
+              schedule: 1,
+              notes: 1,
               "students.id": 1,
               "students.email": 1,
               "students.name": 1,
@@ -110,7 +122,7 @@ class ClassRepo {
     room,
     status,
     schedule,
-    notes,
+    notes = null,
   }: DomainClassCreateUpdate) {
     try {
       const res = await pool
@@ -133,12 +145,12 @@ class ClassRepo {
     }
   }
 
-  static update(
+  static async update(
     { name, room, status, schedule, notes }: DomainClassCreateUpdate,
     id: string
   ) {
     try {
-      pool
+      const res = await pool
         .query()
         .collection(this.collection)
         .updateOne(
@@ -155,6 +167,8 @@ class ClassRepo {
             },
           }
         );
+
+      return res;
     } catch (error) {
       logger.error("update class error", error);
       if (error instanceof Error) {

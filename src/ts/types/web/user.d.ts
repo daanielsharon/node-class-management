@@ -11,10 +11,6 @@ type UserCreateRepo = UserCreate & {
   _id: ObjectId;
 };
 
-type UserCreateResponse = UserCreate & {
-  id: ObjectId;
-};
-
 type UserLogin = {
   email: string;
 };
@@ -23,10 +19,4 @@ type UserUpdate = {
   name: string;
 };
 
-export {
-  UserCreate,
-  UserCreateRepo,
-  UserCreateResponse,
-  UserLogin,
-  UserUpdate,
-};
+export { UserCreate, UserCreateRepo, UserLogin, UserUpdate };

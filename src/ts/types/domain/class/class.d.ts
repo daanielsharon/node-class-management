@@ -25,8 +25,8 @@ export type DomainClassOnly = {
 export type DomainClassCreateUpdate = {
   _id?: ObjectId;
   name: string;
-  room: string;
+  room: number;
   status: string;
   schedule: Date;
-  notes: string;
+  notes: string | null;
 };

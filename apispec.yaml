@@ -596,6 +596,9 @@ components:
             - cancelled
           default: scheduled
           example: scheduled
+        schedule:
+          type: string
+          format: date-time
         notes:
           type: string
           example: trial class for newcomers

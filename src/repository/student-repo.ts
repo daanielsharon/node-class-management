@@ -6,9 +6,10 @@ import {
   DomainStudent,
   DomainStudentClass,
 } from "../ts/types/domain/student.js";
+import { CurrentCollection } from "../ts/enum/collection.ts";
 
 class StudentRepo {
-  static collection: string = "users";
+  static collection: string = CurrentCollection[CurrentCollection.users];
 
   static async get() {
     try {
@@ -81,6 +82,9 @@ class StudentRepo {
           },
           {
             $project: {
+              _id: 1,
+              email: 1,
+              name: 1,
               "classes._id": 1,
               "classes.name": 1,
               "classes.room": 1,
@@ -122,6 +126,9 @@ class StudentRepo {
           },
           {
             $project: {
+              _id: 1,
+              email: 1,
+              name: 1,
               "classes._id": 1,
               "classes.name": 1,
               "classes.room": 1,

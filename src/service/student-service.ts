@@ -9,8 +9,6 @@ class StudentService {
   }
 
   static async getById(id: string) {
-    console.log("executed service");
-
     const res = await StudentRepo.getById(id);
     if (res) {
       const newRes = Util.transformId([res]);
@@ -30,6 +28,7 @@ class StudentService {
 
   static async getProfileById(id: string) {
     const res = await StudentRepo.getProfileById(id);
+    console.log("res", res);
     if (res) {
       const newRes = Util.transformId(res);
       return newRes[0];

@@ -1,18 +1,13 @@
 import { Request } from "express";
 import { ResponseError } from "../error/response-error.ts";
 import UserRepo from "../repository/user-repo.ts";
-import {
-  UserCreate,
-  UserCreateResponse,
-  UserLogin,
-  UserUpdate,
-} from "../ts/types/web/user.js";
+import { UserCreate, UserLogin, UserUpdate } from "../ts/types/web/user.js";
 import { validate } from "../validation/validation.ts";
 import UserValidation from "../validation/user-validation.ts";
 import Util from "../util/id.ts";
 
 class UserService {
-  static async register(request: Request): Promise<UserCreateResponse> {
+  static async register(request: Request): Promise<UserCreate> {
     const { name, role, email }: UserCreate = validate(
       UserValidation.register,
       request
@@ -26,8 +21,9 @@ class UserService {
       );
     }
 
-    const result = await UserRepo.save({ name, role, email });
-    return { id: result!.insertedId, name, role, email };
+    await UserRepo.save({ name, role, email });
+
+    return { name, role, email };
   }
 
   static async login(request: Request): Promise<UserLogin | undefined> {
