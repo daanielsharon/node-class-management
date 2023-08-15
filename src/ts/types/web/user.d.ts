@@ -1,27 +1,27 @@
-import { extend } from "joi";
 import { ObjectId } from "mongodb";
+import { type } from "os";
 
-interface UserCreate {
+type UserCreate = {
   name: string;
   role: string;
   email: string;
-}
+};
 
-interface UserCreateRepo extends UserCreate {
+type UserCreateRepo = UserCreate & {
   _id: ObjectId;
-}
+};
 
-interface UserCreateResponse extends UserCreate {
+type UserCreateResponse = UserCreate & {
   id: ObjectId;
-}
+};
 
-interface UserLogin {
+type UserLogin = {
   email: string;
-}
+};
 
-interface UserUpdate {
+type UserUpdate = {
   name: string;
-}
+};
 
 export {
   UserCreate,

@@ -6,7 +6,7 @@ import { ClassStudentDelete } from "../../ts/types/web/class/class.js";
 
 class ClassStudentRepo {
   static collection: string = "students";
-  static addStudent({ students }: ClassStudent) {
+  static save({ students }: ClassStudent) {
     try {
       pool.query().collection(this.collection).insertMany(students);
     } catch (error) {
@@ -17,7 +17,7 @@ class ClassStudentRepo {
     }
   }
 
-  static removeStudent({ studentId, classId }: ClassStudentDelete) {
+  static delete({ studentId, classId }: ClassStudentDelete) {
     try {
       pool
         .query()

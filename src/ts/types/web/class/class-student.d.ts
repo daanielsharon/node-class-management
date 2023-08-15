@@ -1,3 +1,3 @@
 export type ClassStudent = {
-  students: ClassStudentCreate;
+  students: ClassStudentCreate[];
 };

@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { DomainClassOnly } from "./class.js";
+import { DomainClassOnly } from "./class/class.js";
 
 export type DomainStudent = {
   _id?: ObjectId;

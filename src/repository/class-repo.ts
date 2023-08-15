@@ -2,16 +2,51 @@ import { ObjectId } from "mongodb";
 import { logger } from "../app/logger.js";
 import { ResponseError } from "../error/response-error.js";
 import { pool } from "../pool.js";
-import { ClassCreate, ClassUpdate } from "../ts/types/web/class/class.js";
+import { CurrentCollection } from "../ts/enum/collection.js";
+import {
+  DomainClass,
+  DomainClassCreateUpdate,
+} from "../ts/types/domain/class/class.js";
 
 const classDependency = ["students", "instructors"];
 
 class ClassRepo {
-  static collection: string = "classes";
+  static collection: string = CurrentCollection[CurrentCollection.classes];
 
-  static get() {
+  static async get() {
     try {
-      const res = pool.query().collection(this.collection).find({});
+      const res = await pool
+        .query()
+        .collection<DomainClass>(this.collection)
+        .aggregate([
+          {
+            $lookup: {
+              from: CurrentCollection[CurrentCollection.classes],
+              localField: "_id",
+              foreignField: "class_id",
+              as: CurrentCollection[CurrentCollection.classes],
+            },
+          },
+          {
+            $lookup: {
+              from: CurrentCollection[CurrentCollection.instructors],
+              localField: "_id",
+              foreignField: "class_id",
+              as: CurrentCollection[CurrentCollection.instructors],
+            },
+          },
+          {
+            $project: {
+              "students.id": 1,
+              "students.email": 1,
+              "students.name": 1,
+              "instructors.id": 1,
+              "instructors.email": 1,
+              "instructors.name": 1,
+            },
+          },
+        ])
+        .toArray();
       return res;
     } catch (error) {
       logger.error("get class error", error);
@@ -21,11 +56,45 @@ class ClassRepo {
     }
   }
 
-  static getById(id: ObjectId) {
+  static async getById(id: string) {
     try {
-      const res = pool.query().collection("classes").findOne({
-        _id: id,
-      });
+      const res = await pool
+        .query()
+        .collection<DomainClass>(this.collection)
+        .aggregate([
+          {
+            match: {
+              _id: new ObjectId(id),
+            },
+          },
+          {
+            $lookup: {
+              from: CurrentCollection[CurrentCollection.classes],
+              localField: "_id",
+              foreignField: "class_id",
+              as: CurrentCollection[CurrentCollection.classes],
+            },
+          },
+          {
+            $lookup: {
+              from: CurrentCollection[CurrentCollection.instructors],
+              localField: "_id",
+              foreignField: "class_id",
+              as: CurrentCollection[CurrentCollection.instructors],
+            },
+          },
+          {
+            $project: {
+              "students.id": 1,
+              "students.email": 1,
+              "students.name": 1,
+              "instructors.id": 1,
+              "instructors.email": 1,
+              "instructors.name": 1,
+            },
+          },
+        ])
+        .toArray();
 
       return res;
     } catch (error) {
@@ -36,14 +105,26 @@ class ClassRepo {
     }
   }
 
-  static save({ name, room, status, notes }: ClassCreate) {
+  static async save({
+    name,
+    room,
+    status,
+    schedule,
+    notes,
+  }: DomainClassCreateUpdate) {
     try {
-      pool.query().collection(this.collection).insertOne({
-        name,
-        room,
-        status,
-        notes,
-      });
+      const res = await pool
+        .query()
+        .collection<DomainClassCreateUpdate>(this.collection)
+        .insertOne({
+          name,
+          room,
+          status,
+          schedule,
+          notes,
+        });
+
+      return res;
     } catch (error) {
       logger.error("create class error", error);
       if (error instanceof Error) {
@@ -52,21 +133,28 @@ class ClassRepo {
     }
   }
 
-  static update({ id, name, room, status, notes }: ClassUpdate) {
+  static update(
+    { name, room, status, schedule, notes }: DomainClassCreateUpdate,
+    id: string
+  ) {
     try {
-      pool.query().collection(this.collection).updateOne(
-        {
-          _id: id,
-        },
-        {
-          $set: {
-            name,
-            room,
-            status,
-            notes,
+      pool
+        .query()
+        .collection(this.collection)
+        .updateOne(
+          {
+            _id: new ObjectId(id),
           },
-        }
-      );
+          {
+            $set: {
+              name,
+              room,
+              status,
+              schedule,
+              notes,
+            },
+          }
+        );
     } catch (error) {
       logger.error("update class error", error);
       if (error instanceof Error) {
@@ -75,11 +163,14 @@ class ClassRepo {
     }
   }
 
-  static delete(id: ObjectId) {
+  static async delete(id: string) {
     try {
-      pool.query().collection(this.collection).deleteOne({
-        _id: id,
-      });
+      await pool
+        .query()
+        .collection(this.collection)
+        .deleteOne({
+          _id: new ObjectId(id),
+        });
     } catch (error) {
       logger.error("delete class error", error);
       if (error instanceof Error) {

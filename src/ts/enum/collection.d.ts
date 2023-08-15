@@ -1,3 +1,6 @@
-export enum Collection {
+export enum CurrentCollection {
   "users",
+  "students",
+  "instructors",
+  "classes",
 }

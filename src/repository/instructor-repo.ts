@@ -3,6 +3,7 @@ import { logger } from "../app/logger.ts";
 import { ResponseError } from "../error/response-error.ts";
 import { pool } from "../pool.js";
 import { DomainInstructor } from "../ts/types/domain/instructor.js";
+import { CurrentCollection } from "../ts/enum/collection.js";
 
 class InstructorRepo {
   static collection: string = "users";

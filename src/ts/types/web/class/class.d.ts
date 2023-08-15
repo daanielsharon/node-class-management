@@ -5,6 +5,7 @@ type ClassCreate = {
   name: string;
   room: number;
   status: ClassStatus;
+  schedule: Date;
   notes: string;
 };
 
