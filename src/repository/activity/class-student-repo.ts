@@ -1,14 +1,21 @@
 import { logger } from "../../app/logger.ts";
 import { ResponseError } from "../../error/response-error.ts";
 import { pool } from "../../pool.ts";
-import { ClassStudent } from "../../ts/types/web/class/class-student.js";
-import { ClassStudentDelete } from "../../ts/types/web/class/class.js";
+import {
+  DomainClassStudent,
+  DomainClassStudentCreate,
+} from "../../ts/types/domain/class/class-student.js";
+import { ClassStudentDelete } from "../../ts/types/web/class/class-student.js";
 
 class ClassStudentRepo {
   static collection: string = "students";
-  static save({ students }: ClassStudent) {
+  static async save({ students }: DomainClassStudentCreate) {
     try {
-      pool.query().collection(this.collection).insertMany(students);
+      const res = await pool
+        .query()
+        .collection<DomainClassStudent>(this.collection)
+        .insertMany(students);
+      return res;
     } catch (error) {
       logger.error("add student error", error);
       if (error instanceof Error) {
@@ -17,9 +24,9 @@ class ClassStudentRepo {
     }
   }
 
-  static delete({ studentId, classId }: ClassStudentDelete) {
+  static async delete({ studentId, classId }: ClassStudentDelete) {
     try {
-      pool
+      const res = await pool
         .query()
         .collection(this.collection)
         .deleteMany({
@@ -28,6 +35,8 @@ class ClassStudentRepo {
           },
           classId,
         });
+
+      return res;
     } catch (error) {
       logger.error("remove student error", error);
       if (error instanceof Error) {

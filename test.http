@@ -80,7 +80,7 @@ GET http://localhost:8080/api/v1/students/64db2ecdbf6f6512e4a23739
 GET http://localhost:8080/api/v1/students/profile/
 
 ###
-GET http://localhost:8080/api/v1/students/profile/64db2eccbf6f6512e4a23738
+GET http://localhost:8080/api/v1/students/profile/64dc88f655198f5ec346f048
 
 ### INSTRUCTOR
 
@@ -100,7 +100,7 @@ Content-Type: application/json
     "name": "physics",
     "room": 10,
     "status": "scheduled",
-    "schedule": "Tue Aug 17 2023 15:08:04 GMT+0700",
+    "schedule": "Tue Aug 29 2023 15:08:04 GMT+0700",
     "notes": "tentative"
 }
 
@@ -113,7 +113,7 @@ Content-Type: application/json
     "name": "math",
     "room": 9,
     "status": "scheduled",
-    "schedule": "Tue Aug 17 2023 15:08:04 GMT+0700",
+    "schedule": "Tue Aug 29 2023 15:08:04 GMT+0700",
     "notes": "chance 100%"
 }
 
@@ -127,7 +127,7 @@ Content-Type: application/json
     "name": "science",
     "room": 8,
     "status": "scheduled",
-    "schedule": "Tue Aug 17 2023 15:08:04 GMT+0700",
+    "schedule": "Tue Aug 29 2023 15:08:04 GMT+0700",
     "notes": null
 }
 
@@ -135,7 +135,7 @@ Content-Type: application/json
 GET http://localhost:8080/api/v1/classes
 
 ###
-GET http://localhost:8080/api/v1/classes/64db3366eca84c838c9c8092
+GET http://localhost:8080/api/v1/classes/64dc891d55198f5ec346f04c
 
 ###
 
@@ -153,3 +153,15 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/api/v1/classes/64db332f4372fa31dd77a678
+
+### CLASS - STUDENT
+
+POST http://localhost:8080/api/v1/classes/64dc891d55198f5ec346f04c/students
+Accept: application/json
+Content-Type: application/json
+
+{
+    "students": [
+        "64dc88f655198f5ec346f048", "64dc88f855198f5ec346f049"
+    ]
+}

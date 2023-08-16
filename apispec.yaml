@@ -610,7 +610,12 @@ components:
         students:
           type: array
           items:
-            $ref: "#/components/schemas/users"
+            properties:
+              studentId:
+                type: string
+              classId:
+                type: string
+
       minItems: 1
 
     deleteClassStudents:
@@ -635,8 +640,13 @@ components:
         instructors:
           type: array
           items:
-            $ref: "#/components/schemas/users"
+            properties:
+              instructorId:
+                type: string
+              classId:
+                type: string
       minItems: 1
+      maxItems: 2
 
     deleteClassInstructors:
       type: object

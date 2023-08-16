@@ -1,10 +1,10 @@
 import { Request } from "express";
-import { ResponseError } from "../error/response-error.ts";
-import ClassRepo from "../repository/class-repo.ts";
+import { ResponseError } from "../error/response-error.js";
+import ClassRepo from "../repository/class-repo.js";
 import { ClassCreateUpdate } from "../ts/types/web/class/class.js";
-import Util from "../util/id.ts";
-import ClassValidation from "../validation/class-validation.ts";
-import { validate } from "../validation/validation.ts";
+import Util from "../util/id.js";
+import ClassValidation from "../validation/class/class-validation.js";
+import { validate } from "../validation/validation.js";
 
 class ClassService {
   static async get() {
@@ -25,7 +25,7 @@ class ClassService {
     throw new ResponseError(404, "class not found");
   }
 
-  static async save(request: Request) {
+  static async create(request: Request) {
     const { name, room, status, schedule, notes }: ClassCreateUpdate = validate(
       ClassValidation.saveUpdate,
       request

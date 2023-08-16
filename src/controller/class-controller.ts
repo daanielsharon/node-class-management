@@ -29,9 +29,13 @@ class ClassController {
     }
   }
 
-  static async save(request: Request, response: Response, next: NextFunction) {
+  static async create(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) {
     try {
-      const result = await ClassService.save(request.body);
+      const result = await ClassService.create(request.body);
       ResponseJson[200](response, result);
     } catch (error) {
       logger.error("create class error(controller)", error);

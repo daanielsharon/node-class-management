@@ -5,6 +5,7 @@ import { ResponseError } from "../error/response-error.ts";
 import {
   DomainStudent,
   DomainStudentClass,
+  DomainStudentId,
 } from "../ts/types/domain/student.js";
 import { CurrentCollection } from "../ts/enum/collection.ts";
 
@@ -66,6 +67,37 @@ class StudentRepo {
     }
   }
 
+  static async validateId(ids: ObjectId[]) {
+    try {
+      const res = await pool
+        .query()
+        .collection<DomainStudentId>("users")
+        .aggregate([
+          {
+            $match: {
+              _id: {
+                $in: ids,
+              },
+              role: "student",
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+            },
+          },
+        ])
+        .toArray();
+
+      return res;
+    } catch (error) {
+      logger.error("match student by id", error);
+      if (error instanceof Error) {
+        throw new ResponseError(500, error.message);
+      }
+    }
+  }
+
   static async getProfile() {
     try {
       const res = await pool
@@ -76,23 +108,34 @@ class StudentRepo {
             $lookup: {
               from: "students",
               localField: "_id",
-              foreignField: "student_id",
+              foreignField: "studentId",
               as: "classes",
+              pipeline: [
+                {
+                  $lookup: {
+                    from: "classes",
+                    localField: "classId",
+                    foreignField: "_id",
+                    as: "info",
+                  },
+                },
+              ],
             },
           },
-          {
-            $project: {
-              _id: 1,
-              email: 1,
-              name: 1,
-              "classes._id": 1,
-              "classes.name": 1,
-              "classes.room": 1,
-              "classes.status": 1,
-              "classes.schedule": 1,
-              "classes.notes": 1,
-            },
-          },
+          // },
+          // {
+          //   $project: {
+          //     _id: 1,
+          //     email: 1,
+          //     name: 1,
+          //     "classes._id": 1,
+          //     // "classes.name": 1,
+          //     // "classes.room": 1,
+          //     // "classes.status": 1,
+          //     // "classes.schedule": 1,
+          //     // "classes.notes": 1,
+          //   },
+          // },
         ])
         .toArray();
 
@@ -120,23 +163,33 @@ class StudentRepo {
             $lookup: {
               from: "students",
               localField: "_id",
-              foreignField: "student_id",
+              foreignField: "studentId",
               as: "classes",
+              pipeline: [
+                {
+                  $lookup: {
+                    from: "classes",
+                    localField: "classId",
+                    foreignField: "_id",
+                    as: "info",
+                  },
+                },
+              ],
             },
           },
-          {
-            $project: {
-              _id: 1,
-              email: 1,
-              name: 1,
-              "classes._id": 1,
-              "classes.name": 1,
-              "classes.room": 1,
-              "classes.status": 1,
-              "classes.schedule": 1,
-              "classes.notes": 1,
-            },
-          },
+          // {
+          //   $project: {
+          //     _id: 1,
+          //     email: 1,
+          //     name: 1,
+          //     "classes._id": 1,
+          //     "classes.name": 1,
+          //     "classes.room": 1,
+          //     "classes.status": 1,
+          //     "classes.schedule": 1,
+          //     "classes.notes": 1,
+          //   },
+          // },
         ])
         .toArray();
 

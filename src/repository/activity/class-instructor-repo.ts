@@ -1,12 +1,14 @@
 import { logger } from "../../app/logger.ts";
 import { ResponseError } from "../../error/response-error.ts";
 import { pool } from "../../pool.ts";
-import { ClassInstructor } from "../../ts/types/web/class/class-instructor.js";
-import { ClassInstructorDelete } from "../../ts/types/web/class/class.js";
+import {
+  DomainClassInstructorCreate,
+  DomainClassInstructorDelete,
+} from "../../ts/types/domain/class/class-instructor.js";
 
 class ClassInstructorRepo {
   static collection: string = "insturctors";
-  static save({ instructors }: ClassInstructor) {
+  static save({ instructors }: DomainClassInstructorCreate) {
     try {
       pool.query().collection(this.collection).insertMany(instructors);
     } catch (error) {
@@ -16,7 +18,7 @@ class ClassInstructorRepo {
       }
     }
   }
-  static delete({ instructorId, classId }: ClassInstructorDelete) {
+  static delete({ instructorId, classId }: DomainClassInstructorDelete) {
     try {
       pool
         .query()

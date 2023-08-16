@@ -1,19 +1,11 @@
-type ClassStudentCreate = ClassId & {
-  studentId: ObjectId;
+type ClassId = {
+  classId: string;
 };
 
 type ClassStudentDelete = ClassId & {
-  studentId: ObjectId[];
-};
-
-type ClassInstructorCreate = ClassId & {
-  instructorId: ObjectId;
-};
-
-type ClassInstructorDelete = ClassId & {
-  instructorId: ObjectId[];
+  studentId: string[];
 };
 
 export type ClassStudent = {
-  students: ClassStudentCreate[];
+  students: string[];
 };

@@ -1,8 +1,11 @@
 import { ObjectId } from "mongodb";
 import { DomainClassOnly } from "./class/class.js";
 
-export type DomainStudent = {
-  _id?: ObjectId;
+export type DomainStudentId = {
+  _id: ObjectId;
+};
+
+export type DomainStudent = DomainStudentId & {
   email: string;
   name: string;
 };
