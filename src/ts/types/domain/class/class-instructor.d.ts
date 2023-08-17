@@ -10,6 +10,6 @@ export type DomainClassInstructorCreate = {
 };
 
 export type DomainClassInstructorDelete = {
-  instructorId: ObjectId;
-  classId: ObjectId;
+  instructorId: ObjectId[];
+  classId: string;
 };

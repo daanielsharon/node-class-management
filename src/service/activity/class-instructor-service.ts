@@ -61,6 +61,40 @@ class ClassInstructorService {
       };
     }
   }
+
+  static async delete(request: Request, classId: string) {
+    const { instructors }: ClassInstructor = validate(
+      ClassInstructorValidation.saveDelete,
+      request
+    );
+
+    const classAvailable = await ClassRepo.getById(classId);
+
+    if (classAvailable && classAvailable.length === 0)
+      throw new ResponseError(404, "Class is not found");
+
+    const inputObjectId = Util.toObjectId(instructors);
+
+    const validationResult = (await InstructorRepo.validateId(
+      inputObjectId
+    )) as ObjectId[];
+
+    if (validationResult && validationResult.length === 0)
+      throw new ResponseError(400, "These instructors don't exist!");
+
+    const fakeInstructors = Util.findFakeId(inputObjectId, validationResult);
+
+    if (fakeInstructors.length > 0)
+      throw new ResponseError(
+        400,
+        `These instructors don't exist ${fakeInstructors.join(",")}`
+      );
+
+    await ClassInstructorRepo.delete({
+      instructorId: inputObjectId,
+      classId,
+    });
+  }
 }
 
 export default ClassInstructorService;

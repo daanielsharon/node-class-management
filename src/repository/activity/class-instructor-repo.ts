@@ -51,7 +51,7 @@ class ClassInstructorRepo {
           instructorId: {
             $in: instructorId,
           },
-          classId,
+          classId: new ObjectId(classId),
         });
       return res;
     } catch (error) {

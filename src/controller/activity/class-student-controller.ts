@@ -18,6 +18,21 @@ class ClassStudentController {
       next(error);
     }
   }
+
+  static async delete(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) {
+    try {
+      const id = request.params.id;
+      await ClassStudentService.delete(request.body, id);
+      ResponseJson.delete(response);
+    } catch (error) {
+      logger.error("delete students in a class error", error);
+      next(error);
+    }
+  }
 }
 
 export default ClassStudentController;

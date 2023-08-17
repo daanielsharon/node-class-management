@@ -18,6 +18,21 @@ class ClassInstructorController {
       next(error);
     }
   }
+
+  static async delete(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) {
+    try {
+      const id = request.params.id;
+      await ClassInstructorService.delete(request.body, id);
+      ResponseJson.delete(response);
+    } catch (error) {
+      logger.error("delete instructors in a class error(controller)", error);
+      next(error);
+    }
+  }
 }
 
 export default ClassInstructorController;

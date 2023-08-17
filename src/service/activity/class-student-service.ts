@@ -90,15 +90,10 @@ class ClassStudentService {
         `These students don't exist ${fakeStudents.join(",")}`
       );
 
-    const studentToDelete = inputObjectId.map((input) => ({
-      studentId: input,
-      classId: new ObjectId(classId),
-    }));
-
-    // const res = await ClassStudentRepo.delete({
-    //   studentId: studentToDelete,
-    //   classId,
-    // });
+    await ClassStudentRepo.delete({
+      classId,
+      studentId: inputObjectId,
+    });
   }
 }
 

@@ -47,6 +47,13 @@ class ResponseJson {
       })
       .end();
   }
+
+  static delete(res: Response) {
+    return res.status(200).json({
+      code: 200,
+      status: "OK",
+    });
+  }
 }
 
 export default ResponseJson;

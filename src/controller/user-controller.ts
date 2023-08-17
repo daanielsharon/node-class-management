@@ -76,10 +76,7 @@ class UserController {
     try {
       const id = request.params.id;
       await UserService.delete(id);
-      response.status(200).json({
-        code: 200,
-        status: "OK",
-      });
+      ResponseJson.delete(response);
     } catch (error) {
       logger.error("delete user by id error (controller)", error);
       next(error);

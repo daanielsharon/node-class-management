@@ -66,11 +66,7 @@ class ClassController {
     try {
       const id = request.params.id;
       await ClassService.delete(id);
-
-      response.status(200).json({
-        code: 200,
-        status: "OK",
-      });
+      ResponseJson.delete(response);
     } catch (error) {
       logger.error("delete class error(controller)", error);
       next(error);
