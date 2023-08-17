@@ -1,9 +1,11 @@
+import { ObjectId } from "mongodb";
+
 type ClassId = {
   classId: string;
 };
 
 type ClassStudentDelete = ClassId & {
-  studentId: string[];
+  studentId: ObjectId[];
 };
 
 export type ClassStudent = {

@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 class ClassStudentValidation {
-  static save = Joi.object({
+  static saveDelete = Joi.object({
     students: Joi.array()
       .items(Joi.string())
       .min(1)

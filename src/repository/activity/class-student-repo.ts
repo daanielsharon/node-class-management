@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { logger } from "../../app/logger.ts";
 import { ResponseError } from "../../error/response-error.ts";
 import { pool } from "../../pool.ts";
@@ -18,6 +19,24 @@ class ClassStudentRepo {
       return res;
     } catch (error) {
       logger.error("add student error", error);
+      if (error instanceof Error) {
+        throw new ResponseError(500, error.message);
+      }
+    }
+  }
+
+  static async getNumberOfStudents(classId: string) {
+    try {
+      const res: number = await pool
+        .query()
+        .collection(this.collection)
+        .countDocuments({
+          _id: new ObjectId(classId),
+        });
+
+      return res;
+    } catch (error) {
+      logger.error("get number of students error", error);
       if (error instanceof Error) {
         throw new ResponseError(500, error.message);
       }

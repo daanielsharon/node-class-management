@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { DomainClassId } from "./class-student.js";
 
-type DomainClassInstructoe = DomainClassId & {
+type DomainClassInstructor = DomainClassId & {
   instructorId: ObjectId;
 };
 

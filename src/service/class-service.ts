@@ -3,7 +3,7 @@ import { ResponseError } from "../error/response-error.js";
 import ClassRepo from "../repository/class-repo.js";
 import { ClassCreateUpdate } from "../ts/types/web/class/class.js";
 import Util from "../util/id.js";
-import ClassValidation from "../validation/class/class-validation.js";
+import ClassValidation from "../validation/class-validation.ts";
 import { validate } from "../validation/validation.js";
 
 class ClassService {

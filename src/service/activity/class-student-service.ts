@@ -6,54 +6,99 @@ import ClassRepo from "../../repository/class-repo.ts";
 import StudentRepo from "../../repository/student-repo.ts";
 import { ClassStudent } from "../../ts/types/web/class/class-student.js";
 import Util from "../../util/id.ts";
-import ClassStudentValidation from "../../validation/class/class-student-validation.ts";
+import ClassStudentValidation from "../../validation/activity/class-student-validation.ts";
 import { validate } from "../../validation/validation.ts";
+import ClassConfig from "../../config/class/class.ts";
 
 class ClassStudentService {
   static async create(request: Request, classId: string) {
     const { students }: ClassStudent = validate(
-      ClassStudentValidation.save,
+      ClassStudentValidation.saveDelete,
       request
     );
     const classAvailable = await ClassRepo.getById(classId);
 
     if (classAvailable && classAvailable.length === 0)
-      throw new ResponseError(404, "class not found");
+      throw new ResponseError(404, "Class is not found");
 
-    const studentObjectId = Util.toObjectId(students);
+    const inputObjectId = Util.toObjectId(students);
 
-    const studentAvailable = await StudentRepo.validateId(studentObjectId);
+    const validationResult = (await StudentRepo.validateId(
+      inputObjectId
+    )) as ObjectId[];
 
-    if (studentAvailable && studentAvailable.length !== 0) {
-      const realStudents = studentAvailable.filter((item) =>
-        studentObjectId.forEach((el) => {
-          item._id == el;
-        })
+    if (validationResult && validationResult.length === 0)
+      throw new ResponseError(400, "These students don't exist!");
+
+    const fakeStudents = Util.findFakeId(inputObjectId, validationResult);
+
+    if (fakeStudents.length > 0)
+      throw new ResponseError(
+        400,
+        `These students don't exist ${fakeStudents.join(",")}`
       );
 
-      if (realStudents.length > 0)
-        throw new ResponseError(
-          400,
-          `These student ids don't exist ${realStudents.join(",")}`
-        );
+    const totalStudents = await ClassStudentRepo.getNumberOfStudents(classId);
 
-      const newStudents = {
-        students: studentObjectId.map((item) => ({
-          studentId: item,
-          classId: new ObjectId(classId),
-        })),
-      };
-
-      const res = await ClassStudentRepo.save(newStudents);
-
-      if (res) {
-        return {
-          students,
-        };
-      }
-    } else {
-      throw new ResponseError(400, "These students are not yet available!");
+    // maximum number of students 32
+    if (totalStudents && totalStudents > ClassConfig.maxStudents) {
+      throw new ResponseError(
+        400,
+        "Exceeding max number of students in a classs"
+      );
     }
+
+    const newStudents = inputObjectId.map((item) => ({
+      studentId: item,
+      classId: new ObjectId(classId),
+    }));
+
+    const res = await ClassStudentRepo.save({ students: newStudents });
+
+    if (res) {
+      return {
+        students,
+      };
+    }
+  }
+
+  static async delete(request: Request, classId: string) {
+    const { students }: ClassStudent = validate(
+      ClassStudentValidation.saveDelete,
+      request
+    );
+
+    const classAvailable = await ClassRepo.getById(classId);
+
+    if (classAvailable && classAvailable.length === 0)
+      throw new ResponseError(404, "Class is not found");
+
+    const inputObjectId = Util.toObjectId(students);
+
+    const validationResult = (await StudentRepo.validateId(
+      inputObjectId
+    )) as ObjectId[];
+
+    if (validationResult && validationResult.length === 0)
+      throw new ResponseError(400, "These students dont't exist!");
+
+    const fakeStudents = Util.findFakeId(inputObjectId, validationResult);
+
+    if (fakeStudents.length > 0)
+      throw new ResponseError(
+        400,
+        `These students don't exist ${fakeStudents.join(",")}`
+      );
+
+    const studentToDelete = inputObjectId.map((input) => ({
+      studentId: input,
+      classId: new ObjectId(classId),
+    }));
+
+    // const res = await ClassStudentRepo.delete({
+    //   studentId: studentToDelete,
+    //   classId,
+    // });
   }
 }
 

@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { logger } from "../../app/logger.ts";
 import { ResponseError } from "../../error/response-error.ts";
 import { pool } from "../../pool.ts";
@@ -8,9 +9,13 @@ import {
 
 class ClassInstructorRepo {
   static collection: string = "insturctors";
-  static save({ instructors }: DomainClassInstructorCreate) {
+  static async save({ instructors }: DomainClassInstructorCreate) {
     try {
-      pool.query().collection(this.collection).insertMany(instructors);
+      const res = await pool
+        .query()
+        .collection(this.collection)
+        .insertMany(instructors);
+      return res;
     } catch (error) {
       logger.error("add instructor error", error);
       if (error instanceof Error) {
@@ -18,9 +23,28 @@ class ClassInstructorRepo {
       }
     }
   }
-  static delete({ instructorId, classId }: DomainClassInstructorDelete) {
+
+  static async getNumberOfInstructors(classId: string) {
     try {
-      pool
+      const res: number = await pool
+        .query()
+        .collection(this.collection)
+        .countDocuments({
+          _id: new ObjectId(classId),
+        });
+
+      return res;
+    } catch (error) {
+      logger.error("get number of instructors error", error);
+      if (error instanceof Error) {
+        throw new ResponseError(500, error.message);
+      }
+    }
+  }
+
+  static async delete({ instructorId, classId }: DomainClassInstructorDelete) {
+    try {
+      const res = await pool
         .query()
         .collection(this.collection)
         .deleteMany({
@@ -29,6 +53,7 @@ class ClassInstructorRepo {
           },
           classId,
         });
+      return res;
     } catch (error) {
       logger.error("remove instructor error", error);
       if (error instanceof Error) {

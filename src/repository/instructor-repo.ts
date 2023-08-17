@@ -62,6 +62,36 @@ class InstructorRepo {
       }
     }
   }
+
+  static async validateId(id: ObjectId[]) {
+    try {
+      const res = await pool
+        .query()
+        .collection(this.collection)
+        .aggregate([
+          {
+            $match: {
+              _id: {
+                $in: id,
+              },
+              role: "instructor",
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+            },
+          },
+        ])
+        .toArray();
+      return res;
+    } catch (error) {
+      logger.error("validate id error", error);
+      if (error instanceof Error) {
+        throw new ResponseError(500, error.message);
+      }
+    }
+  }
 }
 
 export default InstructorRepo;

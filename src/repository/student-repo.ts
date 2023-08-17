@@ -67,7 +67,7 @@ class StudentRepo {
     }
   }
 
-  static async validateId(ids: ObjectId[]) {
+  static async validateId(id: ObjectId[]) {
     try {
       const res = await pool
         .query()
@@ -76,7 +76,7 @@ class StudentRepo {
           {
             $match: {
               _id: {
-                $in: ids,
+                $in: id,
               },
               role: "student",
             },

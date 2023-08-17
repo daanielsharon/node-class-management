@@ -30,6 +30,25 @@ class Util {
 
     return result;
   }
+
+  static findFakeId(
+    inputId: Array<ObjectId>,
+    databaseId: Array<ObjectId>
+  ): Array<ObjectId> {
+    const fakeId: Array<ObjectId> = [];
+
+    inputId.forEach((input) => {
+      databaseId.forEach((data) => {
+        if (input !== data) {
+          if (!fakeId.includes(input)) {
+            fakeId.push(input);
+          }
+        }
+      });
+    });
+
+    return fakeId;
+  }
 }
 
 export default Util;
