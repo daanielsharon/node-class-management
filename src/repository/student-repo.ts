@@ -119,16 +119,35 @@ class StudentRepo {
                     as: "info",
                   },
                 },
+                {
+                  $project: {
+                    _id: 0,
+                    studentId: 0,
+                    classId: 0,
+                  },
+                },
+                {
+                  $replaceRoot: {
+                    newRoot: {
+                      $mergeObjects: [{ $arrayElemAt: ["$info", 0] }, "$$ROOT"],
+                    },
+                  },
+                },
+                {
+                  $project: {
+                    info: 0,
+                  },
+                },
               ],
             },
           },
-          // },
+
           // {
           //   $project: {
-          //     _id: 1,
-          //     email: 1,
-          //     name: 1,
-          //     "classes._id": 1,
+          //     // _id: 1,
+          //     // email: 1,
+          //     // name: 1,
+          //     // "classes._id": 1,
           //     // "classes.name": 1,
           //     // "classes.room": 1,
           //     // "classes.status": 1,
@@ -172,6 +191,25 @@ class StudentRepo {
                     localField: "classId",
                     foreignField: "_id",
                     as: "info",
+                  },
+                },
+                {
+                  $project: {
+                    _id: 0,
+                    studentId: 0,
+                    classId: 0,
+                  },
+                },
+                {
+                  $replaceRoot: {
+                    newRoot: {
+                      $mergeObjects: [{ $arrayElemAt: ["$info", 0] }, "$$ROOT"],
+                    },
+                  },
+                },
+                {
+                  $project: {
+                    info: 0,
                   },
                 },
               ],

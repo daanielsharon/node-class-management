@@ -80,7 +80,7 @@ GET http://localhost:8080/api/v1/students/64db2ecdbf6f6512e4a23739
 GET http://localhost:8080/api/v1/students/profile/
 
 ###
-GET http://localhost:8080/api/v1/students/profile/64dc88f655198f5ec346f048
+GET http://localhost:8080/api/v1/students/profile/64dd918fc9c74c993dada52d
 
 ### INSTRUCTOR
 
@@ -156,12 +156,12 @@ DELETE http://localhost:8080/api/v1/classes/64db332f4372fa31dd77a678
 
 ### CLASS - STUDENT
 
-POST http://localhost:8080/api/v1/classes/64dc891d55198f5ec346f04c/students
+POST http://localhost:8080/api/v1/classes/64dd9198c9c74c993dada530/students
 Accept: application/json
 Content-Type: application/json
 
 {
     "students": [
-        "64dc88f655198f5ec346f048", "64dc88f855198f5ec346f049"
+        "64dd918ec9c74c993dada52c", "64dd918fc9c74c993dada52d"
     ]
 }

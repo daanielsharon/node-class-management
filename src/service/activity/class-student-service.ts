@@ -17,13 +17,14 @@ class ClassStudentService {
     );
     const classAvailable = await ClassRepo.getById(classId);
 
-    if (!classAvailable) throw new ResponseError(404, "class not found");
+    if (classAvailable && classAvailable.length === 0)
+      throw new ResponseError(404, "class not found");
 
     const studentObjectId = Util.toObjectId(students);
 
     const studentAvailable = await StudentRepo.validateId(studentObjectId);
 
-    if (studentAvailable) {
+    if (studentAvailable && studentAvailable.length !== 0) {
       const realStudents = studentAvailable.filter((item) =>
         studentObjectId.forEach((el) => {
           item._id == el;
