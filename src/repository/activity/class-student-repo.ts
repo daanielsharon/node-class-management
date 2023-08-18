@@ -85,16 +85,10 @@ class ClassStudentRepo {
         .query()
         .collection(this.collection)
         .deleteMany({
-          $and: [
-            {
-              studentId: {
-                $in: studentId,
-              },
-            },
-            {
-              classId: new ObjectId(classId),
-            },
-          ],
+          studentId: {
+            $in: studentId,
+          },
+          classId: new ObjectId(classId),
         });
 
       return res;
