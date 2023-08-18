@@ -24,30 +24,69 @@ class Util {
   }
 
   static toObjectId(array: Array<string>): Array<ObjectId> {
-    const result = array.map((item) => {
+    return array.map((item) => {
       return new ObjectId(item);
     });
+  }
 
-    return result;
+  static toString(array: Array<ObjectId>): Array<string> {
+    return array.map((item) => {
+      return item.toString();
+    });
+  }
+
+  static matchId(
+    inputId: Array<ObjectId>,
+    databaseId: Array<any>
+  ): Array<ObjectId> {
+    const matchId: string[] = [];
+
+    // console.log("d", databaseId);
+    // console.log("i", inputId);
+
+    // inputId.forEach((input) => {
+    //   databaseId.find((data) => {
+    //     if (data._id.toString() === input.toString()) {
+    //       if (!matchId.includes(input.toString())) {
+    //         matchId.push(input.toString());
+    //       }
+    //     }
+    //   });
+    // });
+
+    databaseId
+      .filter((data) => {
+        return this.toString(inputId).includes(data._id.toString());
+      })
+      .forEach((element) => matchId.push(element._id.toString()));
+
+    return this.toObjectId(matchId);
   }
 
   static findFakeId(
     inputId: Array<ObjectId>,
-    databaseId: Array<ObjectId>
+    databaseId: Array<{ _id: ObjectId }>
   ): Array<ObjectId> {
-    const fakeId: Array<ObjectId> = [];
+    let fakeId: string[];
 
-    inputId.forEach((input) => {
-      databaseId.forEach((data) => {
-        if (input !== data) {
-          if (!fakeId.includes(input)) {
-            fakeId.push(input);
-          }
-        }
-      });
-    });
+    // inputId.forEach((input) => {
+    //   const real = databaseId.find((data) => {
+    //     if (data._id.toString() === input.toString()) {
+    //       return input.toString();
+    //     }
+    //   });
 
-    return fakeId;
+    //   if (!real) {
+    //     if (!fakeId.includes(input.toString())) {
+    //       fakeId.push(input.toString());
+    //     }
+    //   }
+    // });
+
+    const res = this.toString(this.matchId(inputId, databaseId));
+    fakeId = this.toString(inputId).filter((input) => !res.includes(input));
+
+    return this.toObjectId(fakeId);
   }
 }
 

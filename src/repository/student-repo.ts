@@ -113,10 +113,57 @@ class StudentRepo {
               pipeline: [
                 {
                   $lookup: {
-                    from: "classes",
+                    from: CurrentCollection[CurrentCollection.classes],
                     localField: "classId",
                     foreignField: "_id",
                     as: "info",
+                    pipeline: [
+                      {
+                        $lookup: {
+                          from: CurrentCollection[
+                            CurrentCollection.instructors
+                          ],
+                          localField: "_id",
+                          foreignField: "classId",
+                          as: CurrentCollection[CurrentCollection.instructors],
+                          pipeline: [
+                            {
+                              $lookup: {
+                                from: CurrentCollection[
+                                  CurrentCollection.users
+                                ],
+                                localField: "instructorId",
+                                foreignField: "_id",
+                                as: "info",
+                              },
+                            },
+                            // remove id from instructors collection
+                            {
+                              $project: {
+                                _id: 0,
+                              },
+                            },
+                            {
+                              $replaceRoot: {
+                                newRoot: {
+                                  $mergeObjects: [
+                                    { $arrayElemAt: ["$info", 0] },
+                                    "$$ROOT",
+                                  ],
+                                },
+                              },
+                            },
+                            {
+                              $project: {
+                                info: 0,
+                                instructorId: 0,
+                                classId: 0,
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
                   },
                 },
                 {

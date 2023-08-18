@@ -23,34 +23,94 @@ class ClassRepo {
             $lookup: {
               from: CurrentCollection[CurrentCollection.students],
               localField: "_id",
-              foreignField: "class_id",
+              foreignField: "classId",
               as: CurrentCollection[CurrentCollection.students],
+              pipeline: [
+                {
+                  $lookup: {
+                    from: CurrentCollection[CurrentCollection.users],
+                    localField: "studentId",
+                    foreignField: "_id",
+                    as: "info",
+                  },
+                },
+                // remove id from students collection
+                {
+                  $project: {
+                    _id: 0,
+                  },
+                },
+                {
+                  $replaceRoot: {
+                    newRoot: {
+                      $mergeObjects: [{ $arrayElemAt: ["$info", 0] }, "$$ROOT"],
+                    },
+                  },
+                },
+                {
+                  $project: {
+                    info: 0,
+                    studentId: 0,
+                    classId: 0,
+                  },
+                },
+              ],
             },
           },
           {
             $lookup: {
               from: CurrentCollection[CurrentCollection.instructors],
               localField: "_id",
-              foreignField: "class_id",
+              foreignField: "classId",
               as: CurrentCollection[CurrentCollection.instructors],
+              pipeline: [
+                {
+                  $lookup: {
+                    from: CurrentCollection[CurrentCollection.users],
+                    localField: "instructorId",
+                    foreignField: "_id",
+                    as: "info",
+                  },
+                },
+                // remove id from instructors collection
+                {
+                  $project: {
+                    _id: 0,
+                  },
+                },
+                {
+                  $replaceRoot: {
+                    newRoot: {
+                      $mergeObjects: [{ $arrayElemAt: ["$info", 0] }, "$$ROOT"],
+                    },
+                  },
+                },
+                {
+                  $project: {
+                    info: 0,
+                    instructorId: 0,
+                    classId: 0,
+                  },
+                },
+              ],
             },
           },
-          {
-            $project: {
-              _id: 1,
-              name: 1,
-              room: 1,
-              status: 1,
-              schedule: 1,
-              notes: 1,
-              "students.id": 1,
-              "students.email": 1,
-              "students.name": 1,
-              "instructors.id": 1,
-              "instructors.email": 1,
-              "instructors.name": 1,
-            },
-          },
+          // {
+          //   $project: {
+          //     _id: 1,
+          //     name: 1,
+          //     room: 1,
+          //     status: 1,
+          //     schedule: 1,
+          //     notes: 1,
+          //     "students.id": 1,
+          //     "students.email": 1,
+          //     "students.name": 1,
+          //     "instructors.id": 1,
+          //     "instructors.email": 1,
+          //     "instructors.name": 1,
+          //   },
+          // },
         ])
         .toArray();
       return res;
@@ -134,6 +194,8 @@ class ClassRepo {
           status,
           schedule,
           notes,
+          created_at: new Date(),
+          updated_at: new Date(),
         });
 
       return res;
@@ -164,6 +226,7 @@ class ClassRepo {
               status,
               schedule,
               notes,
+              updated_at: new Date(),
             },
           }
         );

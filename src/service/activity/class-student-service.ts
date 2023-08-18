@@ -25,12 +25,17 @@ class ClassStudentService {
 
     const validationResult = (await StudentRepo.validateId(
       inputObjectId
-    )) as ObjectId[];
+    )) as Array<{ _id: ObjectId }>;
 
     if (validationResult && validationResult.length === 0)
-      throw new ResponseError(400, "These students don't exist!");
+      throw new ResponseError(
+        400,
+        `These students don't exist ${inputObjectId.join(",")}`
+      );
 
     const fakeStudents = Util.findFakeId(inputObjectId, validationResult);
+
+    console.log("fake students", fakeStudents);
 
     if (fakeStudents.length > 0)
       throw new ResponseError(
@@ -46,6 +51,18 @@ class ClassStudentService {
         400,
         "Exceeding max number of students in a classs"
       );
+    }
+
+    const classStudents = await ClassStudentRepo.get(classId);
+
+    if (classStudents && classStudents.length > 0) {
+      const res = Util.matchId(inputObjectId, classStudents);
+      console.log("res", res);
+      if (res.length > 0)
+        throw new ResponseError(
+          400,
+          `These students are already in the class ${inputObjectId.join(",")}`
+        );
     }
 
     const newStudents = inputObjectId.map((item) => ({
@@ -77,10 +94,13 @@ class ClassStudentService {
 
     const validationResult = (await StudentRepo.validateId(
       inputObjectId
-    )) as ObjectId[];
+    )) as Array<{ _id: ObjectId }>;
 
     if (validationResult && validationResult.length === 0)
-      throw new ResponseError(400, "These students dont't exist!");
+      throw new ResponseError(
+        400,
+        `These students don't exist ${inputObjectId.join(",")}`
+      );
 
     const fakeStudents = Util.findFakeId(inputObjectId, validationResult);
 

@@ -29,4 +29,6 @@ export type DomainClassCreateUpdate = {
   status: string;
   schedule: Date;
   notes: string | null;
+  created_at?: Date;
+  updated_at?: Date;
 };

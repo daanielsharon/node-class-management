@@ -26,10 +26,15 @@ class ClassInstructorService {
 
     const validationResult = (await InstructorRepo.validateId(
       inputObjectId
-    )) as ObjectId[];
+    )) as Array<{ _id: ObjectId }>;
+
+    console.log("validation result", validationResult);
 
     if (validationResult && validationResult.length === 0)
-      throw new ResponseError(400, "These instructors don't exist!");
+      throw new ResponseError(
+        400,
+        `These instructors don't exist ${inputObjectId.join(",")}`
+      );
 
     const fakeInstructors = Util.findFakeId(inputObjectId, validationResult);
 
@@ -45,6 +50,17 @@ class ClassInstructorService {
 
     if (totalInstructors && totalInstructors > ClassConfig.maxInstructors)
       throw new ResponseError(400, "Exceeding maximum number of instructors");
+
+    const classInstructors = await ClassInstructorRepo.get(classId);
+
+    if (classInstructors && classInstructors.length > 0) {
+      const res = Util.matchId(inputObjectId, classInstructors);
+      if (res.length > 0)
+        throw new ResponseError(
+          400,
+          `These students are already in the class ${inputObjectId.join(",")}`
+        );
+    }
 
     const newInstructors = inputObjectId.map((inputId) => ({
       instructorId: inputId,
@@ -77,10 +93,13 @@ class ClassInstructorService {
 
     const validationResult = (await InstructorRepo.validateId(
       inputObjectId
-    )) as ObjectId[];
+    )) as Array<{ _id: ObjectId }>;
 
     if (validationResult && validationResult.length === 0)
-      throw new ResponseError(400, "These instructors don't exist!");
+      throw new ResponseError(
+        400,
+        `These instructors don't exist ${inputObjectId.join(",")}`
+      );
 
     const fakeInstructors = Util.findFakeId(inputObjectId, validationResult);
 

@@ -7,9 +7,45 @@ import {
   DomainClassStudentCreate,
 } from "../../ts/types/domain/class/class-student.js";
 import { ClassStudentDelete } from "../../ts/types/web/class/class-student.js";
+import { CurrentCollection } from "../../ts/enum/collection.ts";
 
 class ClassStudentRepo {
-  static collection: string = "students";
+  static collection: string = CurrentCollection[CurrentCollection.students];
+
+  static async get(classId: string) {
+    try {
+      const res = await pool
+        .query()
+        .collection<{ _id: ObjectId }>(this.collection)
+        .aggregate([
+          {
+            $match: {
+              classId: new ObjectId(classId),
+            },
+          },
+          {
+            $addFields: {
+              _id: "$studentId",
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+              studentId: 0,
+              classId: 0,
+            },
+          },
+        ])
+        .toArray();
+      return res;
+    } catch (error) {
+      logger.error("get students in a class error");
+      if (error instanceof Error) {
+        throw new ResponseError(500, error.message);
+      }
+    }
+  }
+
   static async save({ students }: DomainClassStudentCreate) {
     try {
       const res = await pool
@@ -18,7 +54,7 @@ class ClassStudentRepo {
         .insertMany(students);
       return res;
     } catch (error) {
-      logger.error("add student error", error);
+      logger.error("add student to a class error", error);
       if (error instanceof Error) {
         throw new ResponseError(500, error.message);
       }
@@ -36,7 +72,7 @@ class ClassStudentRepo {
 
       return res;
     } catch (error) {
-      logger.error("get number of students error", error);
+      logger.error("get number of students in a class error", error);
       if (error instanceof Error) {
         throw new ResponseError(500, error.message);
       }
@@ -57,7 +93,7 @@ class ClassStudentRepo {
 
       return res;
     } catch (error) {
-      logger.error("remove student error", error);
+      logger.error("remove students in a class error", error);
       if (error instanceof Error) {
         throw new ResponseError(500, error.message);
       }
