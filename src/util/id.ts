@@ -41,19 +41,6 @@ class Util {
   ): Array<ObjectId> {
     const matchId: string[] = [];
 
-    // console.log("d", databaseId);
-    // console.log("i", inputId);
-
-    // inputId.forEach((input) => {
-    //   databaseId.find((data) => {
-    //     if (data._id.toString() === input.toString()) {
-    //       if (!matchId.includes(input.toString())) {
-    //         matchId.push(input.toString());
-    //       }
-    //     }
-    //   });
-    // });
-
     databaseId
       .filter((data) => {
         return this.toString(inputId).includes(data._id.toString());
@@ -68,20 +55,6 @@ class Util {
     databaseId: Array<{ _id: ObjectId }>
   ): Array<ObjectId> {
     let fakeId: string[];
-
-    // inputId.forEach((input) => {
-    //   const real = databaseId.find((data) => {
-    //     if (data._id.toString() === input.toString()) {
-    //       return input.toString();
-    //     }
-    //   });
-
-    //   if (!real) {
-    //     if (!fakeId.includes(input.toString())) {
-    //       fakeId.push(input.toString());
-    //     }
-    //   }
-    // });
 
     const res = this.toString(this.matchId(inputId, databaseId));
     fakeId = this.toString(inputId).filter((input) => !res.includes(input));

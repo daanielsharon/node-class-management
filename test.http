@@ -174,6 +174,30 @@ Content-Type: application/json
 
 {
     "instructors": [
-        "64df1712383abbf4f6e4d0fd", "64df1713383abbf4f6e4d1fe"
+        "64df1712383abbf4f6e4d0fd", "64df1713383abbf4f6e4d0fe"
+    ]
+}
+
+###
+
+DELETE http://localhost:8080/api/v1/classes/64df171b383abbf4f6e4d103/students
+Accept: application/json
+Content-Type: application/json
+
+{
+    "students": [
+        "64df1714383abbf4f6e4d0ff", "64df1715383abbf4f6e4d100"
+    ]
+}
+
+###
+
+DELETE http://localhost:8080/api/v1/classes/64df171b383abbf4f6e4d103/instructors
+Accept: application/json
+Content-Type: application/json
+
+{
+    "instructors": [
+        "64df1712383abbf4f6e4d0fd", "64df1713383abbf4f6e4d0fe"
     ]
 }

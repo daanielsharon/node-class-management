@@ -28,8 +28,6 @@ class ClassInstructorService {
       inputObjectId
     )) as Array<{ _id: ObjectId }>;
 
-    console.log("validation result", validationResult);
-
     if (validationResult && validationResult.length === 0)
       throw new ResponseError(
         400,

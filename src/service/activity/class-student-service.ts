@@ -35,8 +35,6 @@ class ClassStudentService {
 
     const fakeStudents = Util.findFakeId(inputObjectId, validationResult);
 
-    console.log("fake students", fakeStudents);
-
     if (fakeStudents.length > 0)
       throw new ResponseError(
         400,
@@ -57,7 +55,6 @@ class ClassStudentService {
 
     if (classStudents && classStudents.length > 0) {
       const res = Util.matchId(inputObjectId, classStudents);
-      console.log("res", res);
       if (res.length > 0)
         throw new ResponseError(
           400,
