@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { ResponseError } from "../error/response-error.ts";
 import UserRepo from "../repository/user-repo.ts";
-import { UserCreate, UserLogin, UserUpdate } from "../ts/types/web/user.js";
+import { UserCreate, UserLogin, UserUpdate } from "../ts/types/web/user.ts";
 import { validate } from "../validation/validation.ts";
 import UserValidation from "../validation/user-validation.ts";
 import Util from "../util/id.ts";

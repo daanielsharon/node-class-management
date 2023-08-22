@@ -4,7 +4,7 @@ import { ResponseError } from "../error/response-error.ts";
 import { pool } from "../pool.ts";
 import { DomainUser, DomainUserUpdate } from "../ts/types/domain/user.js";
 import { UserCreate } from "../ts/types/web/user.js";
-import { CurrentCollection } from "../ts/enum/collection.js";
+import { CurrentCollection } from "../ts/enum/collection.ts";
 
 const userDependency = ["students", "instructors"];
 

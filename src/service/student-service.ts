@@ -5,7 +5,10 @@ import Util from "../util/id.ts";
 class StudentService {
   static async get() {
     const res = await StudentRepo.get();
-    return res;
+    if (res) {
+      const newResponse = Util.transformId(res);
+      return newResponse;
+    }
   }
 
   static async getById(id: string) {

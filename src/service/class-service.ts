@@ -1,10 +1,10 @@
 import { Request } from "express";
-import { ResponseError } from "../error/response-error.js";
-import ClassRepo from "../repository/class-repo.js";
-import { ClassCreateUpdate } from "../ts/types/web/class/class.js";
-import Util from "../util/id.js";
+import ClassRepo from "../repository/class-repo.ts";
+import { ClassCreateUpdate } from "../ts/types/web/class/class.ts";
+import Util from "../util/id.ts";
 import ClassValidation from "../validation/class-validation.ts";
-import { validate } from "../validation/validation.js";
+import { validate } from "../validation/validation.ts";
+import { ResponseError } from "../error/response-error.ts";
 
 class ClassService {
   static async get() {

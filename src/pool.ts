@@ -5,6 +5,11 @@ import { ConnectionPool } from "./ts/interfaces/connection.js";
 class Pool implements ConnectionPool {
   uri: string | null = null;
   client: MongoClient | null = null;
+  name: string | undefined = undefined;
+
+  constructor(name: string = "management") {
+    this.name = name;
+  }
 
   async connect(
     username: string | undefined,
@@ -17,16 +22,20 @@ class Pool implements ConnectionPool {
       serverSelectionTimeoutMS: 500,
     });
     await this.client.connect();
-    await this.client.db("management").command({ ping: 1 });
+    await this.client.db(this.name).command({ ping: 1 });
     logger.info(`connected to ${process.env.MONGO_DATABASE} database`);
   }
 
-  close() {
-    this.client?.close();
+  async close() {
+    await this.client?.close();
   }
 
-  query(name: string = "management"): Db {
-    return this.client!.db(name);
+  async drop() {
+    await this.client?.db(this.name).dropDatabase();
+  }
+
+  query(): Db {
+    return this.client!.db(this.name);
   }
 }
 

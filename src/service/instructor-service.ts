@@ -1,6 +1,6 @@
 import { ResponseError } from "../error/response-error.ts";
-import InstructorRepo from "../repository/instructor-repo.js";
-import Util from "../util/id.js";
+import InstructorRepo from "../repository/instructor-repo.ts";
+import Util from "../util/id.ts";
 
 class InstructorService {
   static async get() {

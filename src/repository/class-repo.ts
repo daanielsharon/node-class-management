@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
-import { logger } from "../app/logger.js";
-import { ResponseError } from "../error/response-error.js";
-import { pool } from "../pool.js";
+import { logger } from "../app/logger.ts";
+import { ResponseError } from "../error/response-error.ts";
+import { pool } from "../pool.ts";
 import {
   DomainClass,
   DomainClassCreateUpdate,
