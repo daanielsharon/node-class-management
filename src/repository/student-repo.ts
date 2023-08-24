@@ -105,6 +105,11 @@ class StudentRepo {
         .collection<DomainStudentClass>(this.collection)
         .aggregate([
           {
+            $match: {
+              role: "student",
+            },
+          },
+          {
             $lookup: {
               from: "students",
               localField: "_id",
@@ -161,6 +166,16 @@ class StudentRepo {
                               },
                             },
                           ],
+                        },
+                      },
+                      {
+                        $addFields: {
+                          id: "$_id",
+                        },
+                      },
+                      {
+                        $project: {
+                          _id: 0,
                         },
                       },
                     ],
@@ -223,6 +238,7 @@ class StudentRepo {
           {
             $match: {
               _id: new ObjectId(id),
+              role: "student",
             },
           },
           {
@@ -238,6 +254,63 @@ class StudentRepo {
                     localField: "classId",
                     foreignField: "_id",
                     as: "info",
+                    pipeline: [
+                      {
+                        $lookup: {
+                          from: CurrentCollection[
+                            CurrentCollection.instructors
+                          ],
+                          localField: "_id",
+                          foreignField: "classId",
+                          as: CurrentCollection[CurrentCollection.instructors],
+                          pipeline: [
+                            {
+                              $lookup: {
+                                from: CurrentCollection[
+                                  CurrentCollection.users
+                                ],
+                                localField: "instructorId",
+                                foreignField: "_id",
+                                as: "info",
+                              },
+                            },
+                            // remove id from instructors collection
+                            {
+                              $project: {
+                                _id: 0,
+                              },
+                            },
+                            {
+                              $replaceRoot: {
+                                newRoot: {
+                                  $mergeObjects: [
+                                    { $arrayElemAt: ["$info", 0] },
+                                    "$$ROOT",
+                                  ],
+                                },
+                              },
+                            },
+                            {
+                              $addFields: {
+                                id: "$_id",
+                              },
+                            },
+                            {
+                              $project: {
+                                _id: 0,
+                              },
+                            },
+                            {
+                              $project: {
+                                info: 0,
+                                instructorId: 0,
+                                classId: 0,
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
                   },
                 },
                 {
@@ -257,6 +330,16 @@ class StudentRepo {
                 {
                   $project: {
                     info: 0,
+                  },
+                },
+                {
+                  $addFields: {
+                    id: "$_id",
+                  },
+                },
+                {
+                  $project: {
+                    _id: 0,
                   },
                 },
               ],

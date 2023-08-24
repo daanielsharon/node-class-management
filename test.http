@@ -74,13 +74,13 @@ DELETE http://localhost:8080/api/v1/users/64db2ecbbf6f6512e4a23737
 GET http://localhost:8080/api/v1/students/
 
 ### 
-GET http://localhost:8080/api/v1/students/64db2ecdbf6f6512e4a23739
+GET http://localhost:8080/api/v1/students/64e6dcf5daf78751c0c16e30
 
 ###
 GET http://localhost:8080/api/v1/students/profile/
 
 ###
-GET http://localhost:8080/api/v1/students/profile/64dd918fc9c74c993dada52d
+GET http://localhost:8080/api/v1/students/profile/64e6dcf5daf78751c0c16e30
 
 ### INSTRUCTOR
 
@@ -156,25 +156,25 @@ DELETE http://localhost:8080/api/v1/classes/64db332f4372fa31dd77a678
 
 ### CLASS - STUDENT
 
-POST http://localhost:8080/api/v1/classes/64df171b383abbf4f6e4d103/students
+POST http://localhost:8080/api/v1/classes/64e6ddf0871f5ad6a96ad8f6/students
 Accept: application/json
 Content-Type: application/json
 
 {
     "students": [
-        "64df1714383abbf4f6e4d0ff", "64df1715383abbf4f6e4d100"
+        "64e6dcf5daf78751c0c16e30"
     ]
 }
 
 ###
 
-POST http://localhost:8080/api/v1/classes/64df171b383abbf4f6e4d103/instructors
+POST http://localhost:8080/api/v1/classes/64e6ddf0871f5ad6a96ad8f6/instructors
 Accept: application/json
 Content-Type: application/json
 
 {
     "instructors": [
-        "64df1712383abbf4f6e4d0fd", "64df1713383abbf4f6e4d0fe"
+        "64e6dcf2daf78751c0c16e2f"
     ]
 }
 
