@@ -1,25 +1,22 @@
 import { Request } from "express";
+import { ResponseError } from "../error/response-error.ts";
 import ClassRepo from "../repository/class-repo.ts";
 import { ClassCreateUpdate } from "../ts/types/web/class/class.ts";
-import Util from "../util/id.ts";
 import ClassValidation from "../validation/class-validation.ts";
 import { validate } from "../validation/validation.ts";
-import { ResponseError } from "../error/response-error.ts";
 
 class ClassService {
   static async get() {
     const res = await ClassRepo.get();
     if (res) {
-      const newRes = Util.transformId(res);
-      return newRes;
+      return res;
     }
   }
 
   static async getById(id: string) {
     const res = await ClassRepo.getById(id);
     if (res && res.length > 0) {
-      const newRes = Util.transformId(res);
-      return newRes[0];
+      return res[0];
     }
 
     throw new ResponseError(404, "class not found");

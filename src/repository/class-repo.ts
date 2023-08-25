@@ -48,16 +48,6 @@ class ClassRepo {
                   },
                 },
                 {
-                  $addFields: {
-                    id: "$_id",
-                  },
-                },
-                {
-                  $project: {
-                    _id: 0,
-                  },
-                },
-                {
                   $project: {
                     info: 0,
                     studentId: 0,
@@ -93,16 +83,6 @@ class ClassRepo {
                     newRoot: {
                       $mergeObjects: [{ $arrayElemAt: ["$info", 0] }, "$$ROOT"],
                     },
-                  },
-                },
-                {
-                  $addFields: {
-                    id: "$_id",
-                  },
-                },
-                {
-                  $project: {
-                    _id: 0,
                   },
                 },
                 {

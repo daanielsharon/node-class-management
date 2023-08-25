@@ -50,7 +50,7 @@ describe("api/v1/students", () => {
 
       const student = await supertest(app).get("/api/v1/students/");
       const result = await supertest(app).get(
-        `/api/v1/students/${student.body.data[0].id}`
+        `/api/v1/students/${student.body.data[0]._id}`
       );
       expect(result.statusCode).toBe(200);
       expect(result.body.data.name).toBe("c");
@@ -65,7 +65,7 @@ describe("api/v1/students", () => {
 
       const student = await supertest(app).get("/api/v1/students/");
       const result = await supertest(app).get(
-        `/api/v1/students/${student.body.data[0].id - 1}`
+        `/api/v1/students/${student.body.data[0]._id - 1}`
       );
       expect(result.statusCode).toBe(500);
       expect(result.body.status).toBe("Internal Server Error");
@@ -104,17 +104,17 @@ describe("api/v1/students", () => {
       const instructors = await supertest(app).get("/api/v1/instructors");
 
       const studentRegistration = await supertest(app)
-        .post(`/api/v1/classes/${classes.body.data[0].id}/students`)
+        .post(`/api/v1/classes/${classes.body.data[0]._id}/students`)
         .send({
-          students: [students.body.data[0].id],
+          students: [students.body.data[0]._id],
         });
 
       expect(studentRegistration.statusCode).toBe(200);
 
       const instructorRegistration = await supertest(app)
-        .post(`/api/v1/classes/${classes.body.data[0].id}/instructors`)
+        .post(`/api/v1/classes/${classes.body.data[0]._id}/instructors`)
         .send({
-          instructors: [instructors.body.data[0].id],
+          instructors: [instructors.body.data[0]._id],
         });
 
       expect(instructorRegistration.statusCode).toBe(200);
@@ -161,24 +161,24 @@ describe("api/v1/students", () => {
       const instructors = await supertest(app).get("/api/v1/instructors");
 
       const studentRegistration = await supertest(app)
-        .post(`/api/v1/classes/${classes.body.data[0].id}/students`)
+        .post(`/api/v1/classes/${classes.body.data[0]._id}/students`)
         .send({
-          students: [students.body.data[0].id],
+          students: [students.body.data[0]._id],
         });
 
       expect(studentRegistration.statusCode).toBe(200);
 
       const instructorRegistration = await supertest(app)
-        .post(`/api/v1/classes/${classes.body.data[0].id}/instructors`)
+        .post(`/api/v1/classes/${classes.body.data[0]._id}/instructors`)
         .send({
-          instructors: [instructors.body.data[0].id],
+          instructors: [instructors.body.data[0]._id],
         });
 
       expect(instructorRegistration.statusCode).toBe(200);
 
       const profileId = await supertest(app).get("/api/v1/students/profile");
       const result = await supertest(app).get(
-        `/api/v1/students/profile/${profileId.body.data[0].id}`
+        `/api/v1/students/profile/${profileId.body.data[0]._id}`
       );
 
       expect(result.statusCode).toBe(200);
@@ -214,24 +214,24 @@ describe("api/v1/students", () => {
       const instructors = await supertest(app).get("/api/v1/instructors");
 
       const studentRegistration = await supertest(app)
-        .post(`/api/v1/classes/${classes.body.data[0].id}/students`)
+        .post(`/api/v1/classes/${classes.body.data[0]._id}/students`)
         .send({
-          students: [students.body.data[0].id],
+          students: [students.body.data[0]._id],
         });
 
       expect(studentRegistration.statusCode).toBe(200);
 
       const instructorRegistration = await supertest(app)
-        .post(`/api/v1/classes/${classes.body.data[0].id}/instructors`)
+        .post(`/api/v1/classes/${classes.body.data[0]._id}/instructors`)
         .send({
-          instructors: [instructors.body.data[0].id],
+          instructors: [instructors.body.data[0]._id],
         });
 
       expect(instructorRegistration.statusCode).toBe(200);
 
       const profileId = await supertest(app).get("/api/v1/students/profile");
       const result = await supertest(app).get(
-        `/api/v1/students/profile/${profileId.body.data[0].id - 1}`
+        `/api/v1/students/profile/${profileId.body.data[0]._id - 1}`
       );
 
       expect(result.statusCode).toBe(500);

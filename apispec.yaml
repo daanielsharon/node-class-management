@@ -421,7 +421,7 @@ components:
     classes:
       type: object
       properties:
-        id:
+        _id:
           type: string
           example: as8ohr43843n
         name:
@@ -462,7 +462,7 @@ components:
     classes-only:
       type: object
       properties:
-        id:
+        _id:
           type: string
           example: as8ohr43843n
         name:
@@ -490,7 +490,7 @@ components:
     users:
       type: object
       properties:
-        id:
+        _id:
           type: string
           example: n2kohvj23kl
         email:
@@ -522,7 +522,7 @@ components:
     students-profile:
       type: object
       properties:
-        id:
+        _id:
           type: string
           example: b12asdf23ksa3
         name:

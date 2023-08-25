@@ -50,7 +50,7 @@ describe("api/v1/students", () => {
 
       const instructor = await supertest(app).get("/api/v1/instructors/");
       const result = await supertest(app).get(
-        `/api/v1/instructors/${instructor.body.data[0].id}`
+        `/api/v1/instructors/${instructor.body.data[0]._id}`
       );
       expect(result.statusCode).toBe(200);
       expect(result.body.data.name).toBe("d");
@@ -65,7 +65,7 @@ describe("api/v1/students", () => {
 
       const instructor = await supertest(app).get("/api/v1/instructors/");
       const result = await supertest(app).get(
-        `/api/v1/instructors/${instructor.body.data[0].id - 1}`
+        `/api/v1/instructors/${instructor.body.data[0]._id - 1}`
       );
       expect(result.statusCode).toBe(500);
       expect(result.body.status).toBe("Internal Server Error");

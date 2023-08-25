@@ -135,7 +135,7 @@ describe("api/v1/classes", () => {
       const classes = await supertest(app).get("/api/v1/classes");
 
       const result = await supertest(app).get(
-        `/api/v1/classes/${classes.body.data[0].id}`
+        `/api/v1/classes/${classes.body.data[0]._id}`
       );
       expect(result.statusCode).toBe(200);
       expect(result.body.data.name).toBe("science");
@@ -156,7 +156,7 @@ describe("api/v1/classes", () => {
       const classes = await supertest(app).get("/api/v1/classes");
 
       const result = await supertest(app).get(
-        `/api/v1/classes/${classes.body.data[0].id - 1}`
+        `/api/v1/classes/${classes.body.data[0]._id - 1}`
       );
       expect(result.statusCode).toBe(500);
       expect(result.body.status).toBe("Internal Server Error");
@@ -180,7 +180,7 @@ describe("api/v1/classes", () => {
 
       const classes = await supertest(app).get("/api/v1/classes");
       const result = await supertest(app)
-        .put(`/api/v1/classes/${classes.body.data[0].id}`)
+        .put(`/api/v1/classes/${classes.body.data[0]._id}`)
         .send({
           name: "science",
           room: 9,
@@ -206,7 +206,7 @@ describe("api/v1/classes", () => {
 
       const classes = await supertest(app).get("/api/v1/classes");
       const result = await supertest(app)
-        .put(`/api/v1/classes/${classes.body.data[0].id}`)
+        .put(`/api/v1/classes/${classes.body.data[0]._id}`)
         .send({
           name: "science",
           room: 9,
@@ -258,7 +258,7 @@ describe("api/v1/classes", () => {
 
       const classes = await supertest(app).get("/api/v1/classes");
       const result = await supertest(app)
-        .put(`/api/v1/classes/${classes.body.data[0].id}`)
+        .put(`/api/v1/classes/${classes.body.data[0]._id}`)
         .send({
           name: "science",
           room: 9,
@@ -284,7 +284,7 @@ describe("api/v1/classes", () => {
 
       const classes = await supertest(app).get("/api/v1/classes");
       const result = await supertest(app)
-        .put(`/api/v1/classes/${classes.body.data[0].id}`)
+        .put(`/api/v1/classes/${classes.body.data[0]._id}`)
         .send({
           name: "",
           room: 9,
@@ -319,7 +319,7 @@ describe("api/v1/classes", () => {
       const classes = await supertest(app).get("/api/v1/classes");
       expect(classes.body.data.length).toBe(3);
       const result = await supertest(app).delete(
-        `/api/v1/classes/${classes.body.data[0].id}`
+        `/api/v1/classes/${classes.body.data[0]._id}`
       );
       expect(result.statusCode).toBe(200);
 
@@ -343,7 +343,7 @@ describe("api/v1/classes", () => {
       const classes = await supertest(app).get("/api/v1/classes");
       expect(classes.body.data.length).toBe(3);
       const result = await supertest(app).delete(
-        `/api/v1/classes/${classes.body.data[0].id - 1}`
+        `/api/v1/classes/${classes.body.data[0]._id - 1}`
       );
       expect(result.statusCode).toBe(500);
       expect(result.body.status).toBe("Internal Server Error");

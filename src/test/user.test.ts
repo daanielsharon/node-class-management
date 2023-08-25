@@ -131,7 +131,7 @@ describe("api/v1/users", () => {
 
       const student = await supertest(app).get("/api/v1/users/");
       const result = await supertest(app).get(
-        `/api/v1/users/${student.body.data[0].id}`
+        `/api/v1/users/${student.body.data[0]._id}`
       );
 
       expect(result.statusCode).toBe(200);
@@ -147,7 +147,7 @@ describe("api/v1/users", () => {
 
       const student = await supertest(app).get("/api/v1/users/");
       const result = await supertest(app).get(
-        `/api/v1/users/${student.body.data[0].id - 1}`
+        `/api/v1/users/${student.body.data[0]._id - 1}`
       );
 
       expect(result.statusCode).toBe(500);
@@ -169,7 +169,7 @@ describe("api/v1/users", () => {
 
       const student = await supertest(app).get("/api/v1/users/");
       const result = await supertest(app)
-        .patch(`/api/v1/users/${student.body.data[0].id}`)
+        .patch(`/api/v1/users/${student.body.data[0]._id}`)
         .send({
           name: "x",
         });
@@ -187,7 +187,7 @@ describe("api/v1/users", () => {
 
       const student = await supertest(app).get("/api/v1/users/");
       const result = await supertest(app)
-        .patch(`/api/v1/users/${student.body.data[0].id}`)
+        .patch(`/api/v1/users/${student.body.data[0]._id}`)
         .send({
           name: "",
         });
@@ -210,7 +210,7 @@ describe("api/v1/users", () => {
       });
 
       const student = await supertest(app).get("/api/v1/users/");
-      await supertest(app).delete(`/api/v1/users/${student.body.data[0].id}`);
+      await supertest(app).delete(`/api/v1/users/${student.body.data[0]._id}`);
 
       const result = await supertest(app).get("/api/v1/users/");
       expect(result.statusCode).toBe(200);
@@ -229,7 +229,7 @@ describe("api/v1/users", () => {
       expect(resultBeforeDeletion.body.data.length).toBe(1);
 
       const deletion = await supertest(app).delete(
-        `/api/v1/users/${resultBeforeDeletion.body.data[0].id - 1}`
+        `/api/v1/users/${resultBeforeDeletion.body.data[0]._id - 1}`
       );
       expect(deletion.statusCode).toBe(500);
       expect(deletion.body.status).toBe("Internal Server Error");

@@ -168,16 +168,6 @@ class StudentRepo {
                           ],
                         },
                       },
-                      {
-                        $addFields: {
-                          id: "$_id",
-                        },
-                      },
-                      {
-                        $project: {
-                          _id: 0,
-                        },
-                      },
                     ],
                   },
                 },
@@ -291,16 +281,6 @@ class StudentRepo {
                               },
                             },
                             {
-                              $addFields: {
-                                id: "$_id",
-                              },
-                            },
-                            {
-                              $project: {
-                                _id: 0,
-                              },
-                            },
-                            {
                               $project: {
                                 info: 0,
                                 instructorId: 0,
@@ -330,16 +310,6 @@ class StudentRepo {
                 {
                   $project: {
                     info: 0,
-                  },
-                },
-                {
-                  $addFields: {
-                    id: "$_id",
-                  },
-                },
-                {
-                  $project: {
-                    _id: 0,
                   },
                 },
               ],
